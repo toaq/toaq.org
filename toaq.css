@@ -1,0 +1,406 @@
+body {
+  	  counter-reset: h1;
+      font-family: 'Segoe UI';
+      max-width: 700px;
+      margin: 0px auto;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-bottom: 40px;
+  }
+
+  h1 {counter-reset: h2}
+  h2 {counter-reset: h3}
+  h3 {counter-reset: h4}
+  h4 {counter-reset: h5}
+  h5 {counter-reset: h6}
+
+  h1:before {counter-increment: h1; content: counter(h1) ". "}
+  h2:before {counter-increment: h2; content: counter(h1) "." content: counter(h2) ". "}
+  h3:before {counter-increment: h3; content: counter(h1) "." content: counter(h2) "." counter(h3) ". "}
+  h4:before {counter-increment: h4; content: counter(h1) "." content: counter(h2) "." counter(h3) "." counter(h4) ". "}
+  h5:before {counter-increment: h5; content: counter(h1) "." content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". "}
+  h6:before {counter-increment: h6; content: counter(h1) "." content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". "}
+
+  h1.nocount:before, h2.nocount:before, h3.nocount:before, h4.nocount:before, h5.nocount:before, h6.nocount:before { content: ""; counter-increment: none } 
+
+  p {
+      text-align: justify;
+      line-height: 150%;
+  }
+
+  p.final {
+      text-align: center;
+      font-size: x-large;
+      font-weight: bold;
+
+  }
+
+  p.warning {
+      border:2px; border-style:solid; border-color:red; padding:7px;
+  }
+  
+  table.paralleltext p {
+      text-align: justify;
+      line-height: 150%;
+      margin-bottom: 0px;
+      margin-top: 0px;
+  }
+
+  table {
+      border-collapse: collapse;
+      width: auto;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 20px;
+  }
+
+  th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      border-color: #92ba45;
+  }
+
+  th {
+      background-color: #92ba45;
+      color: white;
+  }
+
+  table.example {
+      width: auto;
+      margin-left: 0px;
+	  float: left;
+  }
+
+  table.example th:first-child {
+      font-size: small;
+      font-weight: normal;
+  }
+
+  table.example th {
+      background-color: white;
+      color: black;
+      border-bottom: 5px solid #92ba45;
+      padding: 7px;
+      border-right: 0px solid black;
+      width: auto;
+  }
+
+  table.example td {
+      padding: 7px;
+	  
+  }
+
+  table.example tr {
+	max-height: 10px;
+  }
+  
+  table.example tr:nth-child(even){background-color: #cff28c}
+
+  table.example td:nth-last-child(2){
+      width: auto;
+  }
+
+  table.vocabtable td:nth-child(2) {
+      font-weight: bold;
+  }
+
+  table.vocabtable td {
+      text-align: center;
+  }
+
+  td.right {
+      border-bottom: 0px;
+      border-left: 2px solid #92ba45;
+      background-color: white;    
+  }
+
+  td.left {
+      border-bottom: 0px;
+      border-right: 2px solid #92ba45;
+      background-color: white;
+  }
+
+  table.tones td {
+      text-align: center;
+      vertical-align: top;
+  }
+
+  table.tones th {
+      text-align: center;
+  }
+
+  table.def {
+      margin-left: 10px;
+  }
+
+  table.def td {
+      border: 2px solid #92ba45;
+      background-color: #cff28c;
+  }
+
+  table.paralleltext {
+      margin-left: 0px;
+  }
+
+  table.paralleltext td {
+      border-bottom: 1px solid white;
+      padding: 8px;
+      width: 50%;
+      vertical-align: top;
+      display:flex inline;  	
+	  text-align: justify;
+  }
+
+  table.phonemes td:first-child {
+      background-color: #92ba45;
+      color: white;
+      font-weight: bold;
+  }
+
+  table.phonemes td, th {
+      padding-left: 15px;
+      padding-right: 15px;
+  }
+
+  table.graphemes td {
+      padding-left: 25px;
+  }
+
+  table.syllableflowchart td {
+      padding-top: 2px;
+      padding-bottom: 2px;
+      padding-left: 15px;
+      padding-right: 15px;
+      text-align: center;
+      border: 2px solid #92ba45;
+  }
+
+  table.syllableflowchart th {
+      border: 2px solid #92ba45;
+  }
+
+  table.toneintroduction td {
+      background-color: #cff28c;
+      font-size: large;
+      color: black;
+      font-weight: bold;
+      border: 2px solid #92ba45;
+      padding-left: 25px;
+      padding-right: 25px;
+  }
+
+  table.serialpredicate {
+      margin-left: 30px;
+  }
+
+  table.serialpredicate td {
+      border: 0px solid #92ba45;
+  }
+
+  table.serialpredicate td:nth-child(2) {
+      background-color: #cff28c;
+  }
+
+  table.serialpredicate tr:last-child {
+      border-top: 2px solid #92ba45;
+  }
+
+  table.autohotkey {
+      float: right;
+      margin-left: 40px;
+      maring-right: 10px;
+  }
+
+  table.autohotkey td {
+      text-align: center;
+  }
+
+  table.conjunctionexamples th {
+      text-align: center;
+  }
+
+  table.conjunctionexamples td {
+      border: 1px solid #92ba45;
+      text-align: center;
+  }
+
+  table.combo td {
+  	  border-bottom: 0px solid white;
+  }
+
+  span.xxlarge {
+      font-size: xx-large;
+  }
+
+  span.footnote {
+      font-size: small;
+  }
+
+  span.toaqlanguage {
+      font-family: 'Trade Winds';
+  }
+
+  span.toaq {
+      font-weight: bold;
+  }
+
+  span.conj {
+      font-weight: bold;
+      color: #0099ff;
+  }
+
+  ol {
+  list-style-type: none;
+  counter-reset: item;
+  margin: 0;
+  padding: 0;
+}
+
+ol > li {
+  display: table;
+  counter-increment: item;
+  margin-bottom: 0.6em;
+}
+
+ol > li:before {
+  content: counters(item, ".") ". ";
+  display: table-cell;
+  padding-right: 0.6em;    
+}
+
+li ol > li {
+  margin: 0;
+  padding-top: 8px;
+}
+
+li ol > li:before {
+  content: counters(item, ".") " ";
+}
+
+  a {
+      font-weight: 600;
+  }
+
+  a:link {
+      color: #92ba45;
+      background-color: transparent;
+      text-decoration: none;
+  }
+  a:visited {
+      color: #92ba45;
+      background-color: transparent;
+      text-decoration: none;
+  }
+  a:hover {
+      color: #92ba45;
+      background-color: transparent;
+      text-decoration: underline;
+  }
+  a:active {
+      color: #92ba45;
+      background-color: transparent;
+      text-decoration: none;
+  }
+
+  dt {
+      padding-left: 30px;
+      padding-bottom: 4px;
+      text-align: justify;
+  }
+
+  span.tick {
+      color: #92ba45;
+  }
+
+  div.headerimage {
+      text-align: center;
+      margin-top: 24px;
+  }
+
+  div.revision {
+      text-align: right;
+      font-size: x-small;
+  }
+
+  div.version {
+      text-align: center;
+      font-size: small;
+      color: #66ccff;
+  }
+
+  div.copyright {
+      text-align: center;
+      color: #66ccff;
+	  
+  }
+  
+  
+  
+  span.smallcaps {
+      font-variant: small-caps;
+  }
+
+  audio { 
+      width: 90px; 
+      display: block; 
+      margin: 20px; 
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+  audio.letter { 
+      width: 90px; 
+      display: block; 
+      margin: 0px; 
+      margin-left: auto;
+      margin-right: auto;
+  }
+  
+  audio.sample {
+      width: 400px;
+  }
+
+  audio.exaudio {
+	  margin-top: 10px;
+	  margin-left: 10px;
+	  float: left;
+  }
+  
+  .tip {
+      position: relative;
+      display: inline;
+  }
+
+  .tip .tiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: #555;
+      color: #cff28c;
+      text-align: center;
+      border-radius: 6px;
+      padding: 15px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0s;
+      font-weight: bold;
+  }
+
+  .tip .tiptext::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+  }
+
+  .tip:hover .tiptext {
+      visibility: visible;
+      opacity: 1;
+  }
