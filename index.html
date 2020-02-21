@@ -45,13 +45,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
   </script>
   <script>
-    /*** TOOLTIP GLOSSING FOR TOAQ TEXTS ***/
+    /*** AUTOMATIC WORD DEFINITION TOOLTIPS FOR TOAQ TEXTS ***/
     $.getJSON(
       "https://toaq.github.io/dictionary/dictionary.json",
       function(dict) {
         // `dict` is the content of the loaded dictionary.json.
         hoetoalai = "a-zA-Zıāēīōūȳáéíóúýäëïöüÿǎěǐǒǔảẻỉỏủỷâêîôûŷàèìòùỳãẽĩõũỹ"
-                    + "ĀĒĪŌŪȲÁÉÍÓÚÝÄËÏÖÜŸǍĚǏǑǓẢẺỈỎỦỶÂÊÎÔÛŶÀÈÌÒÙỲÃẼĨÕŨỸ";
+                    + "ĀĒĪŌŪȲÁÉÍÓÚÝÄËÏÖÜŸǍĚǏǑǓẢẺỈỎỦỶÂÊÎÔÛŶÀÈÌÒÙỲÃẼĨÕŨỸ"
+                    + "\u0300-\u030f";
         re = new RegExp(
           "<[^>]*>|[" + hoetoalai + "]+|[^<" + hoetoalai + "]", "g");
         $(".with_tooltip_definitions").each(function() {
@@ -75,7 +76,7 @@
                 .toLowerCase();
               // Now we look up the dictionary for the word:
               dict.forEach(function (entry, i, arr) {
-                if (entry.toaq == normalized_word) {
+                if (entry.toaq.replace(/i/g, "ı") == normalized_word) {
                   // We have found the word in the dictionary.
                   // Now we create a tooltip containing its definition:
                   array[index] = '<div class="tip">' + item
