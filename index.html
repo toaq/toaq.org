@@ -50,10 +50,10 @@
       "https://toaq.github.io/dictionary/dictionary.json",
       function(dict) {
         // `dict` is the content of the loaded dictionary.json.
-        hoetoalai = "a-zA-Zıāēīōūȳáéíóúýäëïöüÿǎěǐǒǔảẻỉỏủỷâêîôûŷàèìòùỳãẽĩõũỹ"
+        var hoetoalai = "a-zA-Zıāēīōūȳáéíóúýäëïöüÿǎěǐǒǔảẻỉỏủỷâêîôûŷàèìòùỳãẽĩõũỹ"
                     + "ĀĒĪŌŪȲÁÉÍÓÚÝÄËÏÖÜŸǍĚǏǑǓẢẺỈỎỦỶÂÊÎÔÛŶÀÈÌÒÙỲÃẼĨÕŨỸ"
                     + "\u0300-\u030f";
-        re = new RegExp(
+        var re = new RegExp(
           "<[^>]*>|[" + hoetoalai + "]+|[^<" + hoetoalai + "]", "g");
         $(".with_tooltip_definitions").each(function() {
           // Loading the Toaq text from the elements of class `with_tooltip_definitions`:
