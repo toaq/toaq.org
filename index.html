@@ -46,6 +46,15 @@
   </script>
   <script>
     /*** AUTOMATIC WORD DEFINITION TOOLTIPS FOR TOAQ TEXTS ***/
+    function normalized(toa) {
+      return toa.normalize('NFD')
+                .replace(/i/g, 'ı')
+                .replace(/[\u0300-\u030f]/g, '')
+                .replace(/[^0-9A-Za-zı'_-]+/g, ' ')
+                .replace(/ +/g, ' ')
+                .trim()
+                .toLowerCase();
+    }
     $.getJSON(
       "https://toaq.github.io/dictionary/dictionary.json",
       function(dict) {
@@ -66,17 +75,10 @@
             if ((new RegExp("["+hoetoalai+"]")).test(item[0])) {
               /* It is a Toaq word, so we get a normalized form of it
                 (removing diacritics and having dotless i's: */
-              var normalized_word = item
-                .normalize('NFD')
-                .replace(/i/g, 'ı')
-                .replace(/[\u0300-\u030f]/g, '')
-                .replace(/[^0-9A-Za-zı'_-]+/g, ' ')
-                .replace(/ +/g, ' ')
-                .trim()
-                .toLowerCase();
+              var normalized_word = normalized(item);
               // Now we look up the dictionary for the word:
               dict.forEach(function (entry, i, arr) {
-                if (entry.toaq.replace(/i/g, "ı") == normalized_word) {
+                if (normalized(entry.toaq) == normalized_word) {
                   // We have found the word in the dictionary.
                   // Now we create a tooltip containing its definition:
                   array[index] = '<div class="tip">' + item
