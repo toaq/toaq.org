@@ -39,9 +39,66 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-
   </head>
   <body>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+  </script>
+  <script>
+    /*** TOOLTIP GLOSSING FOR TOAQ TEXTS ***/
+    $.getJSON(
+      "https://toaq.github.io/dictionary/dictionary.json",
+      function(dict) {
+        // `dict` is the content of the loaded dictionary.json.
+        hoetoalai = "a-zA-Zıāēīōūȳáéíóúýäëïöüÿǎěǐǒǔảẻỉỏủỷâêîôûŷàèìòùỳãẽĩõũỹ"
+                    + "ĀĒĪŌŪȲÁÉÍÓÚÝÄËÏÖÜŸǍĚǏǑǓẢẺỈỎỦỶÂÊÎÔÛŶÀÈÌÒÙỲÃẼĨÕŨỸ";
+        re = new RegExp(
+          "<[^>]*>|[" + hoetoalai + "]+|[^<" + hoetoalai + "]", "g");
+        $(".with_tooltip_definitions").each(function() {
+          // Loading the Toaq text from the elements of class `with_tooltip_definitions`:
+          var content = $(this).html();
+          /* Splitting the content into an array of things that are either
+             Toaq words or are other stuff (blanks, HTML tags…): */
+          content = content.match(re);
+          content.forEach(function (item, index, array) {
+            // For each item in `content`, we check whether it's a Toaq word:
+            if ((new RegExp("["+hoetoalai+"]")).test(item[0])) {
+              /* It is a Toaq word, so we get a normalized form of it
+                (removing diacritics and having dotless i's: */
+              var normalized_word = item
+                .normalize('NFD')
+                .replace(/i/g, 'ı')
+                .replace(/[\u0300-\u030f]/g, '')
+                .replace(/[^0-9A-Za-zı'_-]+/g, ' ')
+                .replace(/ +/g, ' ')
+                .trim()
+                .toLowerCase();
+              // Now we look up the dictionary for the word:
+              dict.forEach(function (entry, i, arr) {
+                if (entry.toaq == normalized_word) {
+                  // We have found the word in the dictionary.
+                  // Now we create a tooltip containing its definition:
+                  array[index] = '<div class="tip">' + item
+                        + '<span class="tiptext">' + normalized_word
+                        + ' : ' + entry.english.replace(/▯/g, "___")
+                        + '</span></div>';
+                }
+                /* If we don't find the word in the dictionary, no tooltip
+                   is created. Nothing will happen when hovering the word
+                   with the mouse pointer. */
+              });
+            }
+          });
+          // Adding the result of our work to the `with_tooltip_definitions` element:
+          $(this).html(content.join(""));
+        });
+      // Checking for errors on JSON dictionary loading:
+      }).error(function(jqXHR, textStatus, errorThrown) {
+        console.log("getJSON error: " + textStatus);
+        console.log("Incoming Text: " + jqXHR.responseText);
+    });
+  </script>
+  
   <div class="headerimage"><img src="Logo.png"></div>
 
   <div class="version"><em>public <b>beta</b> version</em></div>
@@ -4044,328 +4101,67 @@
     </tr>
     <tr>
       <td><p><b>
-          <div class="tip">Báorēo<span class="tiptext">baoreo : ___ is of white colour.</span></div>
-          <div class="tip">Nủq<span class="tiptext">nuq : ___ is a snake.</span></div>
+          <div class="with_tooltip_definitions">Báorēo Nủq</div>
       </b></p></td>
       <td><p><b>The White Snake</b></p></td>
     </tr>
     <tr>
       <td><p>
-          <div class="tip">Pũjāo<span class="tiptext">pujao : ___ was long ago.</span></div>
-          <div class="tip">bi<span class="tiptext">bi : marks the end of the prenex.</span></div>
-          <div class="tip">mỉe<span class="tiptext">mie : ___ is alive.</span></div>
-          <div class="tip">sa<span class="tiptext">sa : existential quantifier.</span></div>
-          <div class="tip">shí<span class="tiptext">shi : ___ is one in number.</span></div>
-          <div class="tip">rủaijōaq<span class="tiptext">ruaijoaq : ___ is a king/queen.</span></div>
-          <div class="tip">dǒa<span class="tiptext">doa : ___ is famous/well-known.</span></div>
-          <div class="tip">tì<span class="tiptext">ti : ___ is at ___.</span></div>
-          <div class="tip">tu<span class="tiptext">tu : universal quantifier.</span></div>
-          <div class="tip">lú<span class="tiptext">lu : introduces a statement.</span></div>
-          <div class="tip">pảq<span class="tiptext">paq : ___ is a part of ___.</span></div>
-		  <div class="tip">hóa<span class="tiptext">hoa : relative pronoun whose antecedent is the head of the containing relative clause.</span></div>
-          <div class="tip">gúa<span class="tiptext">gua : ___ is a country.</span></div>
-          <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-          <div class="tip">dûagī<span class="tiptext">duagi : ___ is wise.</span></div>
-          <div class="tip">hóa<span class="tiptext">hoa : relative pronoun whose antecedent is the head of the containing relative clause.</span></div>
-          <div class="tip">da.<span class="tiptext">da : <span class="smallcaps">assertive</span> illocution.</span></div>
+          <div class="with_tooltip_definitions">Pũjāo bi mỉe sa shí rủaijōaq dǒa tì tu lú pảq hóa gúa na, dûagī hóa da.</div>
       </p></td>
       <td><p>A long time ago there lived a king who was famed for his wisdom through all the land.</p></td>
     </tr>
     <tr>
       <td><p>
-          <div class="tip">Bủ<span class="tiptext">bu : ___ is not the case.</span></div>
-          <div class="tip">gải<span class="tiptext">gai : ___ observes ___.</span></div>
-          <div class="tip">hó<span class="tiptext">ho : ___ is/are he/she/they.</span></div>
-          <div class="tip">sia<span class="tiptext">sia : zero quantifier</span></div>
-          <div class="tip">rái<span class="tiptext">rai : ___ is something.</span></div>
-          <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-          <div class="tip">ru<span class="tiptext">ru : connective: and.</span></div>
-          <div class="tip">dủ<span class="tiptext">du : ___ seems to be the case.</span></div>
-          <div class="tip">tỉtūa<span class="tiptext">tỉtūa : ___ makes ___ be at ___.</span></div>
-          <div class="tip">báq<span class="tiptext">baq : __ is the generic collective entity composed of the things that share property ___; ___ are the things that ___, in general.</span></div>
-          <div class="tip">cu<span class="tiptext">cu : third argument place marker</span></div>
-          <div class="tip">hó<span class="tiptext">ho : ___ is/are him/her/them</span></div>
-          <div class="tip">níqdāo<span class="tiptext">niqdao : ___ is news.</span></div>
-          <div class="tip">rǎq<span class="tiptext">raq : ___ pertains to ___.</span></div>
-          <div class="tip">hóa<span class="tiptext">hoa : relative pronoun whose antecedent is the head of the containing relative clause.</span></div>
-          <div class="tip">sóq<span class="tiptext">soq : ___ is the ___est among ___.</span></div>
-          <div class="tip">shủi<span class="tiptext">shui : ___ is secret.</span></div>
-          <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-          <div class="tip">pèo<span class="tiptext">peo : ___ passes through ___.</span></div>
-          <div class="tip">río<span class="tiptext">rio : ___ is air.</span></div>
-          <div class="tip">da.<span class="tiptext">da : <span class="smallcaps">assertive</span> illocution.</span></div>
+          <div class="with_tooltip_definitions">Bủ gải hó sia rái na, ru dủ tỉtūa báq cu hó níqdāo rǎq hóa sóq shủi na, pèo río da.</div>
       </p></td>
       <td><p>Nothing was hidden from him, and it seemed as if news of the most secret things was brought to him through the air.</p></td>
     </tr>
     <tr>
       <td><p>
-        <div class="tip">Keo<span class="tiptext">keo : sentence prefix: however</span></div>
-        <div class="tip">dủq<span class="tiptext">duq : ___ habitually satisfies property ___.</span></div>
-        <div class="tip">hó<span class="tiptext">ho : ___ is/are him/her/them.</span></div>
-        <div class="tip">sa<span class="tiptext">sa : existential quantifier.</span></div>
-        <div class="tip">júa<span class="tiptext">jua : ___ is strange/bizarre.</span></div>
-        <div class="tip">da.<span class="tiptext">da : <span class="smallcaps">assertive</span> illocution.</span></div>
-        <div class="tip">Rào<span class="tiptext">rao : ___ happens at the same time as ___.</span></div>
-        <div class="tip">tu<span class="tiptext">tu : universal quantifier.</span></div>
-        <div class="tip">cháq<span class="tiptext">chaq : ___ is a day.</span></div>
-        <div class="tip">bìe<span class="tiptext">bie : ___ happens after ___.</span></div>
-        <div class="tip">chûq<span class="tiptext">chuq : ___ eats ___.</span></div>
-        <div class="tip">hó<span class="tiptext">ho : ___ is/are him/her/them.</span></div>
-        <div class="tip">réoqhāq<span class="tiptext">reoqhaq : ___ is dinner.</span></div>
-        <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-        <div class="tip">rào<span class="tiptext">rao : ___ happens at the same time as ___.</span></div>
-        <div class="tip">tîshēa<span class="tiptext">tishēa : ___ is empty.</span></div>
-        <div class="tip">tóqfūa<span class="tiptext">toqfūa : ___ is a table.</span></div>
-        <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-        <div class="tip">ru<span class="tiptext">ru : and</span></div>
-        <div class="tip">tỉ<span class="tiptext">ti : ___ is at ___.</span></div>
-        <div class="tip">sia<span class="tiptext">sia : zero quantifier</span></div>
-        <div class="tip">méahēo<span class="tiptext">meaheo : ___ is different from ___.</span></div>
-        <div class="tip">bi,<span class="tiptext">bi : marks the end of the prenex.</span></div>
-        <div class="tip">dủai<span class="tiptext">duai : ___ must satisfy property ___.</span></div>
-		<div class="tip">tỉtūa<span class="tiptext">tỉtūa : ___ makes ___ be at ___.</span></div>
-        <div class="tip">sa<span class="tiptext">sa : existential quantifier.</span></div>
-        <div class="tip">shí<span class="tiptext">shi : ___ is one in number.</span></div>
-        <div class="tip">chẻaq<span class="tiptext">cheaq : ___ is trusty.</span></div>
-        <div class="tip">lủeqchē<span class="tiptext">lueqchē : ___ is a servant.</span></div>
-        <div class="tip">sa<span class="tiptext">sa : existential quantifier.</span></div>
-        <div class="tip">shí<span class="tiptext">shi : ___ is one in number.</span></div>
-		<div class="tip">mẻahēo<span class="tiptext">meaheo : ___ is different from ___.</span></div>
-        <div class="tip">hảq<span class="tiptext">haq : ___ is food.</span></div>
-        <div class="tip">da.<span class="tiptext">da : <span class="smallcaps">assertive</span> illocution.</span></div>
+        <div class="with_tooltip_definitions">Keo dủq hó sa júa da. Rào tu cháq bìe chûq hó réoqhāq na, rào tîshēa tóqfūa na, ru tỉ sia méahēo bi, dủai tỉtūa sa shí chẻaq lủeqchē sa shí mẻahēo hảq da.</div>
       </p></td>
       <td><p>But he had a strange custom; every day after dinner, when the table was cleared, and no one else was present, a trusty servant had to bring him one more dish.</p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Keo<span class="tiptext">keo : sentence prefix: however</span></div>
-      <div class="tip">mu<span class="tiptext">mu : invert first and second argument slots.</span></div>
-      <div class="tip">tỉe<span class="tiptext">tie : ___ covers ___.</span></div>
-      <div class="tip">máq<span class="tiptext">maq : it.</span></div>
-      <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-      <div class="tip">ru<span class="tiptext">ru : and</span></div>
-      <div class="tip">jủaq<span class="tiptext">juaq : Even ___ is the case.</span></div>
-      <div class="tip">bủ<span class="tiptext">bu : ___ is not the case.</span></div>
-      <div class="tip">dủa<span class="tiptext">dua : ___ knows ___ to be the case.</span></div>
-      <div class="tip">lúeqchē<span class="tiptext">lueqchē : ___ is a servant.</span></div>
-      <div class="tip">hêq<span class="tiptext">heq : ___ contains ___.</span></div>
-      <div class="tip">máq<span class="tiptext">hoq : it (concrete).</span></div>
-      <div class="tip">hi<span class="tiptext">hi : which?.</span></div>
-      <div class="tip">rái<span class="tiptext">rai : ___ is anything.</span></div>
-      <div class="tip">da.<span class="tiptext">da : <span class="smallcaps">assertive</span> illocution.</span></div>
-      <div class="tip">Ru<span class="tiptext">ru : and</span></div>
-      <div class="tip">dủa<span class="tiptext">dua : ___ knows ___ to be the case.</span></div>
-      <div class="tip">sia<span class="tiptext">sia : quantifier: no/zero</span></div>
-      <div class="tip">réq<span class="tiptext">req : ___ is a human.</span></div>
-      <div class="tip">hóq<span class="tiptext">hoq : it (abstract).</span></div>
-	  <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-      <div class="tip">ju<span class="tiptext">ju : start incidental clause.</span></div>
-      <div class="tip">kủi<span class="tiptext">kui : ___ is the case because ___.</span></div>
-      <div class="tip">hóq<span class="tiptext">hoq : it (abstract).</span></div>
-      <div class="tip">lû<span class="tiptext">lu : begin statement.</span></div>
-      <div class="tip">rúaijōaq<span class="tiptext">ruaijoaq : ___ is a king/queen.</span></div>
-      <div class="tip">rào<span class="tiptext">rao : ___ happens at the same time as ___.</span></div>
-      <div class="tip">bû<span class="tiptext">bu : ___ is not the case.</span></div>
-      <div class="tip">mủo<span class="tiptext">muo : ___ is complete in aspect ___.</span></div>
-      <div class="tip">gẻqsīa<span class="tiptext">geqsia : ___ is alone.</span></div>
-      <div class="tip">bi,<span class="tiptext">bi : marks the end of the prenex.</span></div>
-      <div class="tip">jỉainūa<span class="tiptext">jiainua : ___ removes/takes ___ from ___.</span></div>
-      <div class="tip">fãqsīa<span class="tiptext">faqsīa : ___ never happens.</span></div>
-      <div class="tip">hó<span class="tiptext">ho : ___ is/are him/her/them.</span></div>
-      <div class="tip">tíechūo<span class="tiptext">tiechūo : ___ is a cover.</span></div>
-      <div class="tip">càjōi<span class="tiptext">cajōi : ___ happens for purpose ___.</span></div>
-      <div class="tip">chûq<span class="tiptext">chuq : ___ eats ___.</span></div>
-      <div class="tip">da.<span class="tiptext">da : <span class="smallcaps">assertive</span> illocution.</span></div>
+      <div class="with_tooltip_definitions">Keo mu tỉe máq na, ru jủaq bủ dủa lúeqchē hêq máq hi rái da. Ru dủa sia réq hóq na, ju kủi hóq lû rúaijōaq rào bû mủo gẻqsīa bi, jỉainūa fãqsīa hó tíechūo càjōi chûq da.</div>
       </p></td>
       <td><p>It was covered, however, and even the servant did not know what was in it, neither did anyone know, for the king never took off the cover to eat of it until he was quite alone. </p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Rào<span class="tiptext"> : .</span></div>
-      <div class="tip">lûi<span class="tiptext"> : .</span></div>
-      <div class="tip">jảqdōi<span class="tiptext"> : .</span></div>
-      <div class="tip">na<span class="tiptext"> : .</span></div>
-      <div class="tip">rào<span class="tiptext"> : .</span></div>
-      <div class="tip">sa<span class="tiptext"> : .</span></div>
-      <div class="tip">shí<span class="tiptext"> : .</span></div>
-      <div class="tip">chảq<span class="tiptext"> : .</span></div>
-      <div class="tip">lúeqchē<span class="tiptext">lueqchē : ___ is a servant.</span></div>
-      <div class="tip">ju<span class="tiptext"> : .</span></div>
-      <div class="tip">jỉainūa<span class="tiptext"> : .</span></div>
-	  <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">háqrīai<span class="tiptext"> : .</span></div>
-      <div class="tip">bi<span class="tiptext"> : .</span></div>
-      <div class="tip">lỉe<span class="tiptext"> : .</span></div>
-      <div class="tip">dảoshāo<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">jàqbīaq<span class="tiptext"> : .</span></div>
-      <div class="tip">bû<span class="tiptext"> : .</span></div>
-      <div class="tip">dẻq<span class="tiptext"> : .</span></div>
-      <div class="tip">bủ<span class="tiptext"> : .</span></div>
-      <div class="tip">hẻaqfā<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">háqrīai<span class="tiptext"> : .</span></div>
-      <div class="tip">pó<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">ga<span class="tiptext"> : .</span></div>
-      <div class="tip">kủa<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div>
+      <div class="with_tooltip_definitions">Rào lûi jảqdōi na rào sa shí chảq lúeqchē ju jỉainūa hó háqrīai bi lỉe dảoshāo hó jàqbīaq bû dẻq bủ hẻaqfā hó háqrīai pó hó ga kủa da.</div>
       </p></td>
       <td><p>This had gone on for a long time, when one day the servant, who took away the dish, was overcome with such curiosity that he could not help carrying the dish into his room.</p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Rào<span class="tiptext"> : .</span></div>
-      <div class="tip">lûi<span class="tiptext"> : .</span></div>
-      <div class="tip">chỉaitāosī<span class="tiptext"> : .</span></div>
-	  <div class="tip">tủa<span class="tiptext"> : .</span></div>
-      <div class="tip">tỉoqpōa<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">kíao<span class="tiptext"> : .</span></div>
-      <div class="tip">bi<span class="tiptext"> : .</span></div>
-      <div class="tip">gẻanūa<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">tíechūo<span class="tiptext"> : .</span></div>
-      <div class="tip">na,<span class="tiptext"> : .</span></div>
-      <div class="tip">ru<span class="tiptext"> : .</span></div>
-      <div class="tip">kảqgāi<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">rêaq<span class="tiptext"> : .</span></div>
-      <div class="tip">sa<span class="tiptext"> : .</span></div>
-      <div class="tip">shí<span class="tiptext"> : .</span></div>
-      <div class="tip">bảorēo<span class="tiptext"> : .</span></div>
-      <div class="tip">nủq<span class="tiptext"> : .</span></div>
-      <div class="tip">háqrīai<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div> 
+      <div class="with_tooltip_definitions">Rào lûi chỉaitāosī tủa tỉoqpōa hó kíao bi gẻanūa hó tíechūo na, ru kảqgāi hó rêaq sa shí bảorēo nủq háqrīai da.</div> 
       </p></td>
       <td><p>When he had carefully locked the door, he lifted up the cover, and saw a white snake lying on the dish.</p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Keo<span class="tiptext"> : .</span></div>
-      <div class="tip">rào<span class="tiptext"> : .</span></div>
-      <div class="tip">kâqgāi<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">máq<span class="tiptext"> : .</span></div>
-      <div class="tip">bi,<span class="tiptext"> : .</span></div>
-      <div class="tip">bủ<span class="tiptext"> : .</span></div>
-      <div class="tip">dẻq<span class="tiptext"> : .</span></div>
-      <div class="tip">tảq<span class="tiptext"> : .</span></div>
-      <div class="tip">bỏq<span class="tiptext"> : .</span></div>
-      <div class="tip">pủa<span class="tiptext"> : .</span></div>
-      <div class="tip">nỏqgāi<span class="tiptext"> : .</span></div>
-	  <div class="tip">hó<span class="tiptext"> : .</span></div>
-	  <div class="tip">máq<span class="tiptext"> : .</span></div>
-	  <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-      <div class="tip">ju<span class="tiptext"> : .</span></div>
-      <div class="tip">kủi<span class="tiptext"> : .</span></div>
-      <div class="tip">hóq<span class="tiptext"> : .</span></div>
-      <div class="tip">tênūa<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">sa<span class="tiptext"> : .</span></div>
-      <div class="tip">shí<span class="tiptext"> : .</span></div>
-      <div class="tip">nủi<span class="tiptext"> : .</span></div>
-      <div class="tip">hẻa<span class="tiptext"> : .</span></div>
-      <div class="tip">na,<span class="tiptext">na : marks the end of a statement.</span></div>
-      <div class="tip">ru<span class="tiptext"> : .</span></div>
-      <div class="tip">nỉetūa<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">máq<span class="tiptext"> : .</span></div>
-      <div class="tip">pó<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">ga<span class="tiptext"> : .</span></div>
-      <div class="tip">bủq<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div>
+      <div class="with_tooltip_definitions">Keo rào kâqgāi hó máq bi, bủ dẻq tảq bỏq pủa nỏqgāi hó máq na, ju kủi hóq tênūa hó sa shí nủi hẻa na, ru nỉetūa hó máq pó hó ga bủq da.</div>
       </p></td>
       <td><p>But when he saw it he could not deny himself the pleasure of tasting it, so he cut of a little bit and put it into his mouth. </p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Bòi<span class="tiptext"> : .</span></div>
-      <div class="tip">fûo<span class="tiptext"> : .</span></div>
-      <div class="tip">máq<span class="tiptext"> : .</span></div>
-      <div class="tip">pó<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">ga<span class="tiptext"> : .</span></div>
-      <div class="tip">lẻq<span class="tiptext"> : .</span></div>
-      <div class="tip">bi,<span class="tiptext"> : .</span></div>
-      <div class="tip">hủogāi<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">rûechōa<span class="tiptext"> : .</span></div>
-      <div class="tip">jũa<span class="tiptext"> : .</span></div>
-      <div class="tip">núi<span class="tiptext"> : .</span></div>
-      <div class="tip">chỏalāq<span class="tiptext"> : .</span></div>
-      <div class="tip">tìcūao<span class="tiptext"> : .</span></div>
-      <div class="tip">pó<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">ga<span class="tiptext"> : .</span></div>
-      <div class="tip">chủao<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div>
+      <div class="with_tooltip_definitions">Bòi fûo máq pó hó ga lẻq bi, hủogāi hó rûechōa jũa núi chỏalāq tìcūao pó hó ga chủao da.</div>
       </p></td>
       <td><p>No sooner had it touched his tongue than he heard a strange whispering of little voices outside his window. </p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Fả<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">na,<span class="tiptext"> : .</span></div>
-      <div class="tip">ru<span class="tiptext"> : .</span></div>
-      <div class="tip">hủosī<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div>
-      <div class="tip">Ru<span class="tiptext"> : .</span></div>
-      <div class="tip">bìe<span class="tiptext"> : .</span></div>
-      <div class="tip">hóq<span class="tiptext"> : .</span></div>
-      <div class="tip">bi,<span class="tiptext"> : .</span></div>
-      <div class="tip">gảishō<span class="tiptext">gaishō : ___ notices ___.</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">lû<span class="tiptext"> : .</span></div>
-      <div class="tip">ku<span class="tiptext"> : .</span></div>
-      <div class="tip">púq<span class="tiptext"> : .</span></div>
-      <div class="tip">shủao<span class="tiptext"> : .</span></div>
-      <div class="tip">pa<span class="tiptext"> : .</span></div>
-      <div class="tip">chẻo<span class="tiptext"> : .</span></div>
-      <div class="tip">chỏadēoq<span class="tiptext"> : .</span></div>
-      <div class="tip">na,<span class="tiptext"> : .</span></div>
-      <div class="tip">ru<span class="tiptext"> : .</span></div>
-      <div class="tip">chẻo<span class="tiptext"> : .</span></div>
-      <div class="tip">tủa<span class="tiptext"> : .</span></div>
-	  <div class="tip">rảqdūa<span class="tiptext"> : .</span></div>
-      <div class="tip">púqhō<span class="tiptext"> : .</span></div>      
-      <div class="tip">tu<span class="tiptext"> : .</span></div>
-	  <div class="tip">rái<span class="tiptext"> : .</span></div>
-      <div class="tip">rǐoq<span class="tiptext"> : .</span></div>
-	  <div class="tip">hóa<span class="tiptext"> : .</span></div>
-	  <div class="tip">báq<span class="tiptext"> : .</span></div>
-	  <div class="tip">lủ<span class="tiptext"> : .</span></div>
-      <div class="tip">kảqgāi<span class="tiptext"> : .</span></div>
-	  <div class="tip">shĩu<span class="tiptext"> : .</span></div>
-      <div class="tip">púqhō<span class="tiptext"> : .</span></div>
-      <div class="tip">hóa<span class="tiptext"> : .</span></div>
-      <div class="tip">tì<span class="tiptext"> : .</span></div>
-      <div class="tip">dúeq<span class="tiptext"> : .</span></div>
-      <div class="tip">ra<span class="tiptext"> : .</span></div>
-      <div class="tip">múaogūaq<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div>
+      <div class="with_tooltip_definitions">Fả hó na, ru hủosī hó da. Ru bìe hóq bi, gảishō hó lû ku púq shủao pa chẻo chỏadēoq na, ru chẻo tủa rảqdūa púqhō tu rái rǐoq hóa báq lủ kảqgāi shĩu púqhō hóa tì dúeq ra múaogūaq da.</div>
       </p></td>
       <td><p>He went and listened, and then noticed that it was the birds who were chattering together, and telling one another of all kinds of things which they had seen in the fields and woods. </p></td>
     </tr>
     <tr>
       <td><p>
-      <div class="tip">Chûq<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">núq<span class="tiptext"> : .</span></div>
-      <div class="tip">pa<span class="tiptext"> : .</span></div>
-      <div class="tip">cả<span class="tiptext"> : .</span></div>
-      <div class="tip">dêq<span class="tiptext"> : .</span></div>
-      <div class="tip">mủidūa<span class="tiptext"> : .</span></div>
-      <div class="tip">hó<span class="tiptext"> : .</span></div>
-      <div class="tip">pó<span class="tiptext"> : .</span></div>
-      <div class="tip">báq<span class="tiptext"> : .</span></div>
-      <div class="tip">nỉai<span class="tiptext"> : .</span></div>
-      <div class="tip">ga<span class="tiptext"> : .</span></div>
-      <div class="tip">tỏaq<span class="tiptext"> : .</span></div>
-      <div class="tip">da.<span class="tiptext"> : .</span></div>
+      <div class="with_tooltip_definitions">Chûq hó núq pa cả dêq mủidūa hó pó báq nỉai ga tỏaq da.</div>
       </p></td>
       <td><p>Eating the snake had given him power of understanding the language of animals.</p></td>
     </tr>
