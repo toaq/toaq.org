@@ -50,7 +50,7 @@
       return toa.normalize('NFD')
                 .replace(/i/g, 'ı')
                 .replace(/[\u0300-\u030f]/g, '')
-                .replace(/[^0-9A-Za-zı'_-]+/g, ' ')
+                .replace(/[^0-9A-Za-zı'_\-]+/g, ' ')
                 .replace(/ +/g, ' ')
                 .trim()
                 .toLowerCase();
