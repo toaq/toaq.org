@@ -46,6 +46,26 @@
   </script>
   <script>
     /*** AUTOMATIC WORD DEFINITION TOOLTIPS FOR TOAQ TEXTS ***/
+    
+    function with_escaped_html(text) {
+      return text.replace(/[&<>"']/g, function(ch) {
+        switch (ch) {
+          case '&':
+            return '&amp;';
+          case '<':
+            return '&lt;';
+          case '>':
+            return '&gt;';
+          case '"':
+            return '&quot;';
+          default:
+            return '&#039;';
+            /* '&apos;' in another option in HTML5, but is absent from
+               HTML4. */
+        }
+      });
+    };
+    
     function normalized(toa) {
       return toa.normalize('NFD')
                 .replace(/i/g, 'ı')
@@ -55,6 +75,7 @@
                 .trim()
                 .toLowerCase();
     }
+    
     $.getJSON(
       "https://toaq.github.io/dictionary/dictionary.json",
       function(dict) {
@@ -81,10 +102,11 @@
                 if (normalized(entry.toaq) == normalized_word) {
                   // We have found the word in the dictionary.
                   // Now we create a tooltip containing its definition:
+                  var def = with_escaped_html(entry.english)
+                            .replace(/▯/g, "___");
                   array[index] = '<div class="tip">' + item
                         + '<span class="tiptext">' + normalized_word
-                        + ' : ' + entry.english.replace(/▯/g, "___")
-                        + '</span></div>';
+                        + ' : ' + def + '</span></div>';
                 }
                 /* If we don't find the word in the dictionary, no tooltip
                    is created. Nothing will happen when hovering the word
