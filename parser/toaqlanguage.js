@@ -3253,12 +3253,12 @@ camxes = (function(){
         pos0 = pos;
         pos1 = pos;
         result0 = parse_quantifier();
-        result0 = result0 !== null ? result0 : "";
         if (result0 !== null) {
           result1 = parse_spaces();
           result1 = result1 !== null ? result1 : "";
           if (result1 !== null) {
-            result2 = parse_arg_4();
+            result2 = parse_predicate();
+            result2 = result2 !== null ? result2 : "";
             if (result2 !== null) {
               result0 = [result0, result1, result2];
             } else {
@@ -3272,6 +3272,9 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
+        }
+        if (result0 === null) {
+          result0 = parse_arg_4();
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return _node("NP", expr);})(pos0, result0);
