@@ -745,9 +745,9 @@ TEO = expr:( ( t e o ) &boundary ) {return ["unquote", _join(expr)];}
 
 GA = expr:( g a &boundary ) {return ["end", _join(expr)];}
 
-syllable = expr:( initial desinence &boundary ) {return _join(expr);}
+syllable = expr:( initial? desinence &boundary ) {return _join(expr);}
 
-initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n h / n / p / r / s h / s / t ) {return _join(expr);}
+initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n h / n / p / r / s h / s / t / apostrophe ) {return _join(expr);}
 
 // https://toaqlanguage.wordpress.com/2019/10/10/the-great-root-expansion-phonology-update/
 // minus https://toaqlanguage.wordpress.com/2021/08/08/miscellanea1/ plus yq
@@ -786,6 +786,7 @@ t = [tT] {return "t";}
 u = [uU] {return "u";}
 w = [wW] {return "w";}
 y = [yY] {return "y";}
+apostrophe = [xX'] { return "'";}
 
 // -------------------------------------------------------
 
