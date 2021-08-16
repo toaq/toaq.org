@@ -4,40 +4,36 @@
 	<title>Toaq Parser</title>
 	<meta charset="utf-8" />
 </head>
-<body background="bgimg4.jpg" bgcolor="#333333"> 
+<body> 
 
 <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="toaqlanguage.js"></script>
 <script type="text/javascript" src="camxes_preproc.js"></script>
 <script type="text/javascript" src="camxes_postproc.js"></script>
 
-	<div id="accordion">
-		<h3><a href="#">Toaq Parser</a></h3>
+	<div id="main">
+		<h1><a href="#">Toaq Parser</a></h1>
 		<div style="text-align:left">
 			<textarea id="i" rows="4"></textarea>
-			<div id="parse_res" style="display:block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF;"
-     height="24em">Text will be converted as you type.</div>
-			<div id="parse_result" style="display:block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF;"
-     height="24em">Text will be parsed as you type.</div>
+			<div id="parse_res" class="text-result">Text will be converted as you type.</div>
+			<div id="parse_result" class="text-result">Text will be parsed as you type.</div>
 		</div>
 	</div>
-	<br />
-
 	<div id="image-goes-here">
 		<canvas id="tree-canvas"></canvas>
 	</div>
 
 
 <style type="text/css">
-body { font-size: small !important; font-family: sans-serif; margin: 20px; background-color: #ffffff}
-#accordion { margin: 0px auto; width: 500px; text-align: center; }
+body { font-size: small !important; font-family: sans-serif; margin: 20px; background-color: #ffffff; background: url("bgimg4.jpg"); }
+#main { margin: 0px auto 1em auto; width: 500px; text-align: center; }
+#main .text-result { display: block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF; }
 table { margin: 0px auto; }
 td {font-size:small !important;}
 textarea {resize: vertical; width: 100%}
 a.example { text-decoration: none; color: #4183C4!important; }
 .help {text-align: left;}
 #image-goes-here { text-align: center; }
-img { border: 1px solid #bbbbbb; }
 .nobr { white-space: nowrap; }
 </style>
 
@@ -52,17 +48,17 @@ img { border: 1px solid #bbbbbb; }
 
 function run_camxes() {
 	try {
-	  var input = $('#i').val();
-	  input = input.replace(/ı/g, "i");
-	  input = camxes_preprocessing(input);
-      var result = camxes.parse(input);
-    } catch (e) {
-	  $('#parse_res').text("");
-      $('#parse_result').text( e.toString() );
-      return;
-    }
+		var input = $('#i').val();
+		input = input.replace(/ı/g, "i");
+		input = camxes_preprocessing(input);
+		var result = camxes.parse(input);
+	} catch (e) {
+		$('#parse_res').text("");
+		$('#parse_result').text( e.toString() );
+		return;
+	}
 
-	var syntree_str = camxes_postprocessing(result);  // @camxes_postproc.js
+	var syntree_str = camxes_postprocessing(result); // @camxes_postproc.js
 	
 	
 	var converted_str = document.getElementById("i").value;
@@ -73,39 +69,40 @@ function run_camxes() {
 	pretty_output = pretty_output.replace(/\[([A-Za-z0-9_\(\)'])+ /g, "[");
 	pretty_output = pretty_output.replace(/\[ +/g, "[");
 	pretty_output = pretty_output.replace(/ +\]/g, "]");
+	pretty_output = pretty_output.replace(/\[([^\[\]]+)\]/g, "$1");
 	pretty_output = pretty_output.replace(/([A-Z] )\[/g, "$1[");
 	pretty_output = prettify_brackets(pretty_output);
 	pretty_output = pretty_output.replace(/ +/gm, " ");
-    $('#parse_result').text( pretty_output );
+	$('#parse_result').text( pretty_output );
 
 	draw_syntree(syntree_str);
 }
 
 function prettify_brackets(str) {
 	const superscript = (n) => n < 1 || n % 1 ? "" : (n | 0).toString().replace(/\d/g, m => "⁰¹²³⁴⁵⁶⁷⁸⁹"[m]);
-	const open = (n) => "([{<"[n % 4] + superscript(n / 4);
-	const close = (n) => superscript(n / 4) + ")]}>"[n % 4];
+	const open = (n) => "([{‹"[n % 4] + superscript(n / 4);
+	const close = (n) => superscript(n / 4) + ")]}›"[n % 4];
 	let floor = 0;
 	return str.replace(/[\[\]]/g, m => m === "[" ? open(floor++) : close(--floor));
 }
 
 function draw_syntree(str) {
-	const font_size = 13;
-	const term_font = "italic 13pt serif";
-	const nonterm_font = "13pt serif";
-	var vert_space = 60;
-	const hor_space = 14;
+	const font_size = 12;
+	const term_font = "12pt 'Georgia', serif";
+	const nonterm_font = "12pt 'Lucida Grande', sans-serif";
+	const vert_space = 50;
+	const hor_space = 13;
 	const color = true;
 	const term_lines = true;
 	const canvas = document.getElementById("tree-canvas");
-	console.log("CANVAS: ", canvas);
 	var img = go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines);
+	canvas.style.border = "1px solid #bbbbbb";
 	return false;
 } // handler()
 
 $(function() {
 	// UI 
-	$("#accordion").accordion({collapsible: true, icons: false, autoHeight: false});
+	$("#main").accordion({collapsible: true, icons: false, autoHeight: false});
 	$('#i').bind("keyup", run_camxes);
 	$('#i').bind("change", run_camxes);
 });

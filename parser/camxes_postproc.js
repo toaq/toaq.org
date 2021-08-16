@@ -9,7 +9,7 @@ const tone_mark_to_diacritic = {
 };
 
 function restore_diacritics(text) {
-  return text.replace(/([aeiouy])([aeiouy]*q?)([/\\^\-~V?1-7])/g, (m, v, vq, tm) => (v + tone_mark_to_diacritic[tm] + vq).normalize("NFC"));
+  return text.replace(/([aeiouy])([aeiouy]*q?)([/\\^\-~V?1-7])/g, (m, v, vq, tm) => (v + tone_mark_to_diacritic[tm] + vq).normalize("NFC")).replace(/i/gm, "ı");
 }
 
 function to_syntree(node) {

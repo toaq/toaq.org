@@ -122,7 +122,7 @@ Node.prototype.draw = function(ctx, font_size, term_font, nonterm_font, color, t
 		
 	ctx.fillStyle = "black";
 	if (color) {
-		ctx.fillStyle = "#ff66ff";
+		ctx.fillStyle = "#ee33dd";
 		if (this.has_children)
 			ctx.fillStyle = "#3385ff";
 	}
