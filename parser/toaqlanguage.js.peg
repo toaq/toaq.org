@@ -617,7 +617,7 @@ MO_content_predicate_tone = expr:( MO content_tone ) {return ["quote", _join(exp
 
 freemod = expr:( spaces? ( interjection / parenthetical / incidental / vocative ) spaces? freemod? ) {return _node("freemod", expr);}
 
-interjection = expr:( "ha" &boundary ) {return ["interjection", _join(expr)];}
+interjection = expr:( "_xxx" &boundary ) {return ["interjection", _join(expr)];}
 
 parenthetical = expr:( parenthetical_1 spaces? end_parenthetical ) {return _node("parenthetical", expr);}
 
