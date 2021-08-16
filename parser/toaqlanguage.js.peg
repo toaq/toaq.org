@@ -221,9 +221,9 @@ arg_1 = expr:( forethought_coP_arg / arg_2 ) {return _node("NP", expr);}
 
 arg_2 = expr:( focus? spaces? arg_3 ) {return _node("NP", expr);}
 
-arg_3 = expr:( quantifier spaces? predicate? / arg_4 ) {return _node("NP", expr);}
+arg_3 = expr:( arg_4 spaces? ( relative_clause / freemod )? ) {return _node("NP", expr);}
 
-arg_4 = expr:( arg_5 spaces? ( relative_clause / freemod )? ) {return _node("NP", expr);}
+arg_4 = expr:( quantifier spaces? predicate? / arg_5 ) {return _node("NP", expr);}
 
 arg_5 = expr:( serial_argument / arg_6 ) {return _node("NP", expr);}
 

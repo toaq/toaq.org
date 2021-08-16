@@ -321,6 +321,7 @@ camxes = (function(){
         "u": parse_u,
         "w": parse_w,
         "y": parse_y,
+        "apostrophe": parse_apostrophe,
         "EOF": parse_EOF,
         "spaces": parse_spaces,
         "space_char": parse_space_char
@@ -3252,12 +3253,15 @@ camxes = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_quantifier();
+        result0 = parse_arg_4();
         if (result0 !== null) {
           result1 = parse_spaces();
           result1 = result1 !== null ? result1 : "";
           if (result1 !== null) {
-            result2 = parse_predicate();
+            result2 = parse_relative_clause();
+            if (result2 === null) {
+              result2 = parse_freemod();
+            }
             result2 = result2 !== null ? result2 : "";
             if (result2 !== null) {
               result0 = [result0, result1, result2];
@@ -3272,9 +3276,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          result0 = parse_arg_4();
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return _node("NP", expr);})(pos0, result0);
@@ -3303,15 +3304,12 @@ camxes = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_arg_5();
+        result0 = parse_quantifier();
         if (result0 !== null) {
           result1 = parse_spaces();
           result1 = result1 !== null ? result1 : "";
           if (result1 !== null) {
-            result2 = parse_relative_clause();
-            if (result2 === null) {
-              result2 = parse_freemod();
-            }
+            result2 = parse_predicate();
             result2 = result2 !== null ? result2 : "";
             if (result2 !== null) {
               result0 = [result0, result1, result2];
@@ -3326,6 +3324,9 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
+        }
+        if (result0 === null) {
+          result0 = parse_arg_5();
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return _node("NP", expr);})(pos0, result0);
@@ -12953,6 +12954,7 @@ camxes = (function(){
         pos0 = pos;
         pos1 = pos;
         result0 = parse_initial();
+        result0 = result0 !== null ? result0 : "";
         if (result0 !== null) {
           result1 = parse_desinence();
           if (result1 !== null) {
@@ -13080,6 +13082,9 @@ camxes = (function(){
                                         result0 = parse_s();
                                         if (result0 === null) {
                                           result0 = parse_t();
+                                          if (result0 === null) {
+                                            result0 = parse_apostrophe();
+                                          }
                                         }
                                       }
                                     }
@@ -14877,6 +14882,41 @@ camxes = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset) {return "y";})(pos0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_apostrophe() {
+        var cacheKey = "apostrophe@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0;
+        var pos0;
+        
+        pos0 = pos;
+        if (/^[xX']/.test(input.charAt(pos))) {
+          result0 = input.charAt(pos);
+          pos++;
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("[xX']");
+          }
+        }
+        if (result0 !== null) {
+          result0 = (function(offset) { return "'";})(pos0);
         }
         if (result0 === null) {
           pos = pos0;
