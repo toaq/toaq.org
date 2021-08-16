@@ -14,5 +14,3 @@
 function camxes_preprocessing(input) {
   return input.normalize("NFD").replace(/([\u0300-\u036f])([aeiouy]*q?)/g, (m, dia, vq) => vq + diacritic_to_tone_mark[dia]);
 }
-
-module.exports.preprocessing = camxes_preprocessing;
