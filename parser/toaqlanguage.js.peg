@@ -670,7 +670,7 @@ illocutionary_1 = expr:( ( m o q / d a / k a / s o / b a ) &boundary ) {return [
 // MATH EXPRESSIONS
 // X = expr:(  ) {return _node("X", expr);}
 
-quantifier = expr:( ( t u / s i a / s a / h i / j a ) &boundary ) {return ["quantifier", _join(expr)];}
+quantifier = expr:( ( t u / s i a / s a / h i / j a / k e / b a q ) &boundary ) {return ["quantifier", _join(expr)];}
 
 
 
