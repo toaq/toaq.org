@@ -47,15 +47,6 @@ img { border: 1px solid #bbbbbb; }
 <script type="text/javascript" src="js/syntree.js"></script>
 
 <script type="text/javascript">
-var selpahi = "";
-/*
- *  Binding the function run_camxes() to keyup event on demo_textarea by using jQuery
- */
-$('#i').bind( "keyup",
-  function(e) {
-    run_camxes();
-	
-  } );
 
 function run_camxes() {
 	try {
@@ -64,187 +55,66 @@ function run_camxes() {
 	  input = camxes_preprocessing(input);
       var result = camxes.parse(input);
     } catch (e) {
+	  $('#parse_res').text("");
       $('#parse_result').text( e.toString() );
-	  
       return;
     }
-	/* We get the output mode selected in the combobox */
-	// var mode = document.getElementById("optlist").selectedIndex;
-	var result_str = camxes_postprocessing(result);  // @camxes_postproc.js
+
+	var syntree_str = camxes_postprocessing(result);  // @camxes_postproc.js
 	
 	
-	converted_str = document.getElementById("i").value;
+	var converted_str = document.getElementById("i").value;
 	converted_str = restore_diacritics(converted_str);
-	
-	pretty_output = result_str;
+	$('#parse_res').text( converted_str );
+
+	var pretty_output = syntree_str;
 	pretty_output = pretty_output.replace(/\[([A-Za-z0-9_\(\)'])+ /g, "[");
-	//pretty_output = delete_superfluous_brackets(pretty_output);
 	pretty_output = pretty_output.replace(/\[ +/g, "[");
 	pretty_output = pretty_output.replace(/ +\]/g, "]");
 	pretty_output = pretty_output.replace(/([A-Z] )\[/g, "$1[");
 	pretty_output = prettify_brackets(pretty_output);
 	pretty_output = pretty_output.replace(/ +/gm, " ");
-
-	/* Retrieve the result */
     $('#parse_result').text( pretty_output );
-	$('#parse_res').text( converted_str );
-	selpahi = result_str;
-	handler();
-}
 
-function str_print_uint(val, charset) {
-	// 'charset' must be a character array.
-	var radix = charset.length;
-	var str = "";
-	val -= val % 1;  // No float allowed
-	while (val >= 1) {
-		str = charset[val % radix] + str;
-		val /= radix;
-		val -= val % 1;
-	}
-	return str;
+	draw_syntree(syntree_str);
 }
 
 function prettify_brackets(str) {
-	var open_brackets = ["(", "[", "{", "<"];
-	var close_brackets = [")", "]", "}", ">"];
-	var brackets_number = 4;
-//	var numset = ['0','1','2','3','4','5','6','7','8','9'];
-	var numset = ['\u2070','\u00b9','\u00b2','\u00b3','\u2074',
-	              '\u2075','\u2076','\u2077','\u2078','\u2079'];
-	var i = 0;
-	var floor = 0;
-	while (i < str.length) {
-		if (str[i] == '[') {
-			var n = floor % brackets_number;
-			var num = (floor && !n) ?
-				str_print_uint(floor / brackets_number, numset) : "";
-			str = str_replace(str, i, 1, open_brackets[n] + num);
-			floor++;
-		} else if (str[i] == ']') {
-			floor--;
-			var n = floor % brackets_number;
-			var num = (floor && !n) ?
-				str_print_uint(floor / brackets_number, numset) : "";
-			str = str_replace(str, i, 1, num + close_brackets[n]);
-		}
-		i++;
-	}
-	return str;
+	const superscript = (n) => n < 1 || n % 1 ? "" : (n | 0).toString().replace(/\d/g, m => "⁰¹²³⁴⁵⁶⁷⁸⁹"[m]);
+	const open = (n) => "([{<"[n % 4] + superscript(n / 4);
+	const close = (n) => superscript(n / 4) + ")]}>"[n % 4];
+	let floor = 0;
+	return str.replace(/[\[\]]/g, m => m === "[" ? open(floor++) : close(--floor));
 }
 
-function handler(font_size_update, vert_space_update, hor_space_update) {
-try {
-	// Initialize the various options.
-	var term_font = "";
-	var nonterm_font = "";
-	var color = false;
-	var term_lines = false;
-	/*
-	if (document.getElementById("term-ital").checked)
-		term_font = term_font + "italic ";
-	if (document.getElementById("term-bold").checked)
-		term_font = term_font + "bold ";
-	if (document.getElementById("nonterm-ital").checked)
-		nonterm_font = nonterm_font + "italic ";
-	if (document.getElementById("nonterm-bold").checked)
-		nonterm_font = nonterm_font + "bold ";
-	if (document.getElementById("color-check").checked)
-		color = true;
-	if (document.getElementById("term-lines").checked)
-		term_lines = true;
-    */
-	term_font = term_font + "italic ";
-
-	
-	color = true;
-	term_lines = true;
-	
-	/*
-	font_size = $("#font-size-slider").slider( "option", "value" );
-	vert_space = $("#vert-space-slider").slider( "option", "value" );
-	hor_space = $("#hor-space-slider").slider( "option", "value" );
-	*/
-	font_size = 13;
-	vert_space = 60;
-	hor_space = 14;
-	
-	if (font_size_update) font_size = font_size_update;
-	if (vert_space_update) vert_space = vert_space_update;
-	if (hor_space_update) hor_space = hor_space_update;
-	term_font = term_font + font_size + "pt ";
-	nonterm_font = nonterm_font + font_size + "pt ";
-	term_font = term_font + $('input:radio[name=font-style]:checked').val();
-	nonterm_font = nonterm_font + $('input:radio[name=font-style]:checked').val();
-	
-	// Get the string.
-	
-	// var str = document.getElementById("parse_result").value;
-	var str = selpahi;
-	
-	//var str = $('#i').val();
-	//var str = parse_result;
-	
-	/*$("#image-goes-here").text(str + ", " + font_size + ", " + 
-		term_font + ", " + nonterm_font + ", " + vert_space + ", " + hor_space);*/
-	
-	var img = go(str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines);
-	$("#image-goes-here").empty();
-	$("#image-goes-here").append(img);
-	
-} catch (err) {
-	if (debug) {
-		throw(err);
-	} else { 
-		if (err == "canvas")
-			$("#image-goes-here").text("Browser not supported.");
-	}
-} // try-catch
-return false;
+function draw_syntree(str) {
+	try {
+		const font_size = 13;
+		const term_font = "italic 13pt serif";
+		const nonterm_font = "13pt serif";
+		var vert_space = 60;
+		const hor_space = 14;
+		const color = true;
+		const term_lines = true;
+		var img = go(str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines);
+		$("#image-goes-here").empty();
+		$("#image-goes-here").append(img);
+	} catch (err) {
+		if (debug) {
+			throw(err);
+		} else { 
+			if (err == "canvas")
+				$("#image-goes-here").text("Browser not supported.");
+		}
+	} // try-catch
+	return false;
 } // handler()
 
 $(function() {
 	// UI 
-	/*
-	$("#make-link, #color-check, #term-lines").button();
-	$("#font-size-slider").slider({value: 12, min: 8, max: 16, step: 1});
-	$("#vert-space-slider").slider({value: 35, min: 35, max: 70, step: 5});
-	$("#hor-space-slider").slider({value: 10, min: 10, max: 50, step: 5});
-	$("#font-style-radio, #term-font-check, #nonterm-font-check").buttonset();
-	*/
 	$("#accordion").accordion({collapsible: true, icons: false, autoHeight: false});
-	
-	try {
-		var qs = decodeURIComponent(window.location.search.slice(1));
-		qs = qs.replace(/^i=/,"");
-		qs = qs.replace(/\+/g," ");
-		if (qs == "") throw "";
-		document.getElementById("i").value = qs;
-	} catch (err) {}
-	
-	handler();
-	
-	// Events
-	$("#i").keyup(function() {handler(); return true;});
-	$("#i").change(function() {handler(); return true;});
-	$(".redraw").change(function() {return handler()});
-	$("#make-link").click(function() {
-		var loc = window.location.href;
-		loc = loc.replace(window.location.search, "");
-		
-		window.prompt ("Link for this tree:", loc + "?i=" +
-			encodeURIComponent(document.getElementById("i").value));
-		return false;
-	});/*
-	$("#font-size-slider").bind("slide", function (event, ui) {
-		handler(ui.value, null, null); return true;
-	});
-	$("#vert-space-slider").bind("slide", function (event, ui) {
-		handler(null, ui.value, null); return true;
-	});
-	$("#hor-space-slider").bind("slide", function (event, ui) {
-		handler(null, null, ui.value); return true;
-	});*/
+	$('#i').bind("keyup", run_camxes);
+	$('#i').bind("change", run_camxes);
 });
 </script>
 
