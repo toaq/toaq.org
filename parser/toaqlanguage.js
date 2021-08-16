@@ -140,6 +140,8 @@ camxes = (function(){
         "forethought_coP_pred_relative_predicate_1": parse_forethought_coP_pred_relative_predicate_1,
         "LU_relative": parse_LU_relative,
         "LU_relative_tone": parse_LU_relative_tone,
+        "LA_relative_predicate": parse_LA_relative_predicate,
+        "LA_relative_tone": parse_LA_relative_tone,
         "MI_relative_predicate": parse_MI_relative_predicate,
         "MI_relative_predicate_1": parse_MI_relative_predicate_1,
         "MI_relative_predicate_tone": parse_MI_relative_predicate_tone,
@@ -4986,13 +4988,16 @@ camxes = (function(){
         var pos0;
         
         pos0 = pos;
-        result0 = parse_MI_relative_predicate();
+        result0 = parse_LA_relative_predicate();
         if (result0 === null) {
-          result0 = parse_PO_relative_predicate();
+          result0 = parse_MI_relative_predicate();
           if (result0 === null) {
-            result0 = parse_quotation_relative_predicate();
+            result0 = parse_PO_relative_predicate();
             if (result0 === null) {
-              result0 = parse_relative_predicate_3();
+              result0 = parse_quotation_relative_predicate();
+              if (result0 === null) {
+                result0 = parse_relative_predicate_3();
+              }
             }
           }
         }
@@ -5396,6 +5401,93 @@ camxes = (function(){
         return result0;
       }
       
+      function parse_LA_relative_predicate() {
+        var cacheKey = "LA_relative_predicate@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_LA_relative_tone();
+        if (result0 !== null) {
+          result1 = parse_spaces();
+          result1 = result1 !== null ? result1 : "";
+          if (result1 !== null) {
+            result2 = parse_predicate();
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return _node("RelP", expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_LA_relative_tone() {
+        var cacheKey = "LA_relative_tone@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_LA();
+        if (result0 !== null) {
+          result1 = parse_relative_tone();
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return ["starter", _join(expr)];})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
       function parse_MI_relative_predicate() {
         var cacheKey = "MI_relative_predicate@" + pos;
         var cachedResult = cache[cacheKey];
@@ -5431,7 +5523,7 @@ camxes = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, expr) {return _node("VP", expr);})(pos0, result0);
+          result0 = (function(offset, expr) {return _node("RelP", expr);})(pos0, result0);
         }
         if (result0 === null) {
           pos = pos0;
@@ -5487,7 +5579,7 @@ camxes = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, expr) {return _node("VP", expr);})(pos0, result0);
+          result0 = (function(offset, expr) {return _node("RelP", expr);})(pos0, result0);
         }
         if (result0 === null) {
           pos = pos0;
@@ -5575,7 +5667,7 @@ camxes = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, expr) {return _node("VP", expr);})(pos0, result0);
+          result0 = (function(offset, expr) {return _node("RelP", expr);})(pos0, result0);
         }
         if (result0 === null) {
           pos = pos0;
@@ -5622,7 +5714,7 @@ camxes = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, expr) {return _node("VP", expr);})(pos0, result0);
+          result0 = (function(offset, expr) {return _node("RelP", expr);})(pos0, result0);
         }
         if (result0 === null) {
           pos = pos0;

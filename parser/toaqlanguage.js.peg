@@ -315,7 +315,7 @@ relative_predicate = expr:( serial_relative_predicate / relative_predicate_1 ) {
 
 relative_predicate_1 = expr:( coP_pred_relative_predicate / forethought_coP_pred_relative_predicate / relative_predicate_2 ) {return _node("predicate_1", expr);}
 
-relative_predicate_2 = expr:( MI_relative_predicate / PO_relative_predicate / quotation_relative_predicate / relative_predicate_3 ) {return _node("predicate_1", expr);}
+relative_predicate_2 = expr:( LA_relative_predicate / MI_relative_predicate / PO_relative_predicate / quotation_relative_predicate / relative_predicate_3 ) {return _node("predicate_1", expr);}
 
 relative_predicate_3 = expr:( syllable relative_tone ( syllable compound_tone )+ / predicate_word relative_tone ) {return ["predicate_2", _join(expr)];}
 
@@ -336,16 +336,21 @@ LU_relative = expr:( LU_relative_tone spaces? statement spaces? end_LU? ) {retur
 LU_relative_tone = expr:( LU relative_tone ) {return ["predicatizer", _join(expr)];}
 
 
-MI_relative_predicate = expr:( MI_relative_predicate_1 spaces? GA? ) {return _node("VP", expr);}
+LA_relative_predicate = expr:( LA_relative_tone spaces? predicate ) {return _node("RelP", expr);}
 
-MI_relative_predicate_1 = expr:( MI_relative_predicate_tone spaces? ( predicate / argument / adverb / prepositional_phrase ) ) {return _node("VP", expr);}
+LA_relative_tone = expr:( LA relative_tone ) {return ["starter", _join(expr)];}
+
+
+MI_relative_predicate = expr:( MI_relative_predicate_1 spaces? GA? ) {return _node("RelP", expr);}
+
+MI_relative_predicate_1 = expr:( MI_relative_predicate_tone spaces? ( predicate / argument / adverb / prepositional_phrase ) ) {return _node("RelP", expr);}
 
 MI_relative_predicate_tone = expr:( MI relative_tone ) {return ["predicatizer", _join(expr)];}
 
 
-PO_relative_predicate = expr:( PO_relative_predicate_1 spaces? GA? ) {return _node("VP", expr);}
+PO_relative_predicate = expr:( PO_relative_predicate_1 spaces? GA? ) {return _node("RelP", expr);}
 
-PO_relative_predicate_1 = expr:( PO_relative_predicate_tone spaces? argument ) {return _node("VP", expr);}
+PO_relative_predicate_1 = expr:( PO_relative_predicate_tone spaces? argument ) {return _node("RelP", expr);}
 
 PO_relative_predicate_tone = expr:( PO relative_tone ) {return ["predicatizer", _join(expr)];}
 
