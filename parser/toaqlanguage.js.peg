@@ -685,7 +685,7 @@ compound_tone = [\-1] {return "-";}
 
 arg_tone = [\/2] {return "\/";}
 
-relative_tone = [V3] {return "V";}
+relative_tone = [V"3] {return "V";}
 
 verb_tone = [\?4] {return "?";}
 
@@ -726,14 +726,16 @@ GA = expr:( g a &boundary ) {return ["end", _join(expr)];}
 
 syllable = expr:( initial desinence &boundary ) {return _join(expr);}
 
-initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n / p / r / s h / s / t ) {return _join(expr);}
+initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n h / n / p / r / s h / s / t ) {return _join(expr);}
 
+// https://toaqlanguage.wordpress.com/2019/10/10/the-great-root-expansion-phonology-update/
+// minus https://toaqlanguage.wordpress.com/2021/08/08/miscellanea1/ plus yq
 desinence = expr:( 
-	a y   / a o   / a i   / a q   / a     /
-	u y   / u a o / u a i / u e q / u e   / u o q / u o / u i   / u a q / u a  / u q / u  /
-	i y   / i a o / i a i / i e q / i e   / i o q / i o / i u   / i a q / i a  / i q / i  /
-	o y   / o e q / o e   / o i   / o a q / o a   / o q / o     /
-	e y   / e o q / e o   / e i   / e a q / e a   / e q / e     / y / y q
+	a y / a o   / a i   / a q   / a     /
+	u y / u a o / u a i / u e q / u e   / u o i / u o q / u o / u i   / u a q / u a  / u q / u  /
+	i y / i a o / i a i / i e q / i e   / i o i / i o q / i o / i u   / i a q / i a  / i q / i  /
+	o y / o e q / o e   / o i   / o a i / o a q / o a   / o q / o u   / o     /
+	e y / e o q / e o   / e i   / e a i / e a q / e a   / e q / e     / y / y q
 ) {return _join(expr);}
 
 vowel = expr:( a / e / i / o / u / y ) {return _join(expr);}
