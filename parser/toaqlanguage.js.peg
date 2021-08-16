@@ -1,4 +1,5 @@
 // Toaq PEG Parser
+// August 2021 version by Lynn.
 
 {
   function _join(arg)
@@ -96,7 +97,7 @@ forethought_co_bar_sentence = expr:( gik spaces? sentence ) {return _node("Co'",
 // SENTENCE and STATEMENT
 // X = expr:(  ) {return _node("X", expr);}
 
-sentence_prefix = expr:( k e o &boundary / j e &boundary ) {return ["prefix", _join(expr)];}
+sentence_prefix = expr:( ( k e o / j e / t i u ) &boundary ) {return ["prefix", _join(expr)];}
 
 statement = expr:( coP_statement / statement_1 ) {return _node("statement", expr);}
 
@@ -728,14 +729,14 @@ syllable = expr:( initial desinence &boundary ) {return _join(expr);}
 initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n / p / r / s h / s / t ) {return _join(expr);}
 
 desinence = expr:( 
-	a o   / a i   / a q   / a     /
-	u a o / u a i / u e q / u e   / u o q / u o / u i   / u a q / u a  / u q / u  /
-	i a o / i a i / i e q / i e   / i o q / i o / i u   / i a q / i a  / i q / i  /
-	o e q / o e   / o i   / o a q / o a   / o q / o     /
-	e o q / e o   / e i   / e a q / e a   / e q / e
+	a y   / a o   / a i   / a q   / a     /
+	u y   / u a o / u a i / u e q / u e   / u o q / u o / u i   / u a q / u a  / u q / u  /
+	i y   / i a o / i a i / i e q / i e   / i o q / i o / i u   / i a q / i a  / i q / i  /
+	o y   / o e q / o e   / o i   / o a q / o a   / o q / o     /
+	e y   / e o q / e o   / e i   / e a q / e a   / e q / e     / y / y q
 ) {return _join(expr);}
 
-vowel = expr:( a / e / i / o / u ) {return _join(expr);}
+vowel = expr:( a / e / i / o / u / y ) {return _join(expr);}
 
 boundary = expr:( tone / &initial / spaces / EOF ) {return _join(expr);}
 
