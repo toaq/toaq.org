@@ -75,7 +75,11 @@ sentence_1 = expr:( forethought_coP_sentence / sentence_2 ) {return _node("sente
 
 sentence_2 = expr:( spaces? sentence_prefix? sentence_3 ) {return _node("S", expr);}
 
-sentence_3 = expr:( spaces? statement spaces? illocutionary? ) {return _node("S", expr);}
+sentence_3 = expr:( spaces? ( statement / LA_predication ) spaces? illocutionary? ) {return _node("S", expr);}
+
+LA_predication = expr:( LA_predicate_tone spaces? predication ) {return _node("predication", expr);}
+
+LA_predicate_tone = expr:( LA verb_tone ) {return ["starter", _join(expr)];}
 
 
 fragment = expr:( spaces? coP_rel / spaces? relative_clause / spaces? prenex / spaces? terms ) {return _node("fragment", expr);}
@@ -156,7 +160,7 @@ forethought_coP_pred_1 = expr:( predicate spaces? forethought_co_bar_pred ) {ret
 forethought_co_bar_pred = expr:( gik spaces? predicate ) {return _node("Co'", expr);}
 
 
-LU_predicate = expr:( LU_predicate_tone spaces? statement ) {return _node("VP", expr);}
+LU_predicate = expr:( LU_predicate_tone spaces? statement spaces? end_LU? ) {return _node("VP", expr);}
 
 LU_predicate_tone = expr:( LU verb_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -204,7 +208,7 @@ term = expr:( ( linking_word? spaces? argument ) / adverb / termset / prepositio
 // LINKING WORDS
 // X = expr:(  ) {return _node("X", expr);}
 
-linking_word = expr:( ( f i / g o / c u / k e ) &boundary ) {return ["case", _join(expr)];}
+linking_word = expr:( ( f i / g o / c u ) &boundary ) {return ["case", _join(expr)];}
 
 
 
@@ -327,7 +331,7 @@ forethought_coP_pred_relative_predicate = expr:( forethought_connective spaces? 
 forethought_coP_pred_relative_predicate_1 = expr:( relative_predicate spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LU_relative = expr:( LU_relative_tone spaces? statement ) {return _node("RelP", expr);}
+LU_relative = expr:( LU_relative_tone spaces? statement spaces? end_LU? ) {return _node("RelP", expr);}
 
 LU_relative_tone = expr:( LU relative_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -557,7 +561,7 @@ MO_preposition_tone = expr:( MO preposition_tone ) {return ["quote", _join(expr)
 
 content_clause = expr:( coP_content_statement / content_clause_1 ) {return _node("content", expr);}
 
-content_clause_1 = expr:( content_predication spaces? end_statement? / LU_content ) {return _node("content", expr);}
+content_clause_1 = expr:( content_predication spaces? end_CP? / LU_content ) {return _node("content", expr);}
 
 content_predication = expr:( content_predicate spaces? terms? ) {return _node("content_2", expr);}
 
@@ -569,7 +573,7 @@ content_predicate = expr:( serial_content_predicate / content_predicate_1 ) {ret
 
 content_predicate_1 = expr:( coP_pred_content_predicate / forethought_coP_pred_content_predicate / content_predicate_2 ) {return _node("predicate_1", expr);}
 
-content_predicate_2 = expr:( MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
+content_predicate_2 = expr:( LA_content_predicate / MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
 
 content_predicate_3 = expr:( syllable content_tone ( syllable compound_tone )+ / predicate_word content_tone ) {return ["predicate_3", _join(expr)];}
 
@@ -585,7 +589,12 @@ forethought_coP_pred_content_predicate = expr:( forethought_connective spaces? f
 forethought_coP_pred_content_predicate_1 = expr:( content_predicate spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LU_content = expr:( LU_content_tone statement ) {return _node("CP", expr);}
+LA_content_predicate = expr:( LA_content_tone spaces? predicate ) {return _node("CP", expr);}
+
+LA_content_tone = expr:( LA content_tone ) {return ["starter", _join(expr)];}
+
+
+LU_content = expr:( LU_content_tone statement spaces? end_LU? ) {return _node("CP", expr);}
 
 LU_content_tone = expr:( LU content_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -643,16 +652,24 @@ prefix = expr:( prefix_1 freemod? ) {return _node("prefix", expr);}
 prefix_1 = expr:( m u &boundary ) {return ["prefix", _join(expr)];}
 
 
-focus = expr:( k u &boundary ) {return ["Focus", _join(expr)];}
+focus = expr:( ( k u / t o u ) &boundary ) {return ["Focus", _join(expr)];}
 
 
 
 // END SENTENCE
-// X = expr:(  ) {return _node("X", expr);}
-
 end_statement = expr:( end_statement_1 freemod? ) {return _node("end", expr);}
 
 end_statement_1 = expr:( ( n a &boundary ) ) {return ["end_1", _join(expr)];}
+
+// END CP
+end_CP = expr:( end_CP_1 freemod? ) {return _node("end", expr);}
+
+end_CP_1 = expr:( ( c y &boundary ) ) {return ["end_1", _join(expr)];}
+
+// END LU
+end_LU = expr:( end_LU_1 freemod? ) {return _node("end", expr);}
+
+end_LU_1 = expr:( ( k y &boundary ) ) {return ["end_1", _join(expr)];}
 
 // {return (expr == "") ? ["BEhO"] : _node("BEhO", expr);}
 
@@ -701,7 +718,7 @@ adverb_tone = [~7] {return "~";}
 
 predicate_word = expr:( !function_word syllable ) {return _join(expr);}
 
-function_word = expr:( sentence_prefix / connective / start_incidental / start_parenthetical / end_parenthetical / quantifier / illocutionary / end_statement / end_prenex / LU / MI / PO / MO / TEO / GA / linking_word / vocative ) {return _join(expr);}
+function_word = expr:( sentence_prefix / connective / start_incidental / start_parenthetical / end_parenthetical / quantifier / illocutionary / end_statement / end_prenex / LA / LU / MI / PO / MO / TEO / GA / linking_word / vocative ) {return _join(expr);}
 
 end_prenex = expr:( ( b i / p a ) &boundary ) {return ["end", _join(expr)];}
 
@@ -713,7 +730,10 @@ end_parenthetical = expr:( k i &boundary ) {return ["end", _join(expr)];}
 
 vocative_marker = expr:( h u &boundary ) {return ["vocative", _join(expr)];}
 
-LU = expr:( ( l u / l i / l o / m a / t i o ) &boundary ) {return _join(expr);}
+// TODO: li?
+LA = expr:( ( l a / m a / t i o ) &boundary ) {return _join(expr);}
+
+LU = expr:( l u &boundary ) {return _join(expr);}
 
 MI = expr:( ( m i / s h u ) &boundary ) {return _join(expr);}
 

@@ -43,6 +43,8 @@ camxes = (function(){
         "sentence_1": parse_sentence_1,
         "sentence_2": parse_sentence_2,
         "sentence_3": parse_sentence_3,
+        "LA_predication": parse_LA_predication,
+        "LA_predicate_tone": parse_LA_predicate_tone,
         "fragment": parse_fragment,
         "coP_sentence": parse_coP_sentence,
         "co_bar_sentence": parse_co_bar_sentence,
@@ -237,6 +239,8 @@ camxes = (function(){
         "coP_pred_content_predicate": parse_coP_pred_content_predicate,
         "forethought_coP_pred_content_predicate": parse_forethought_coP_pred_content_predicate,
         "forethought_coP_pred_content_predicate_1": parse_forethought_coP_pred_content_predicate_1,
+        "LA_content_predicate": parse_LA_content_predicate,
+        "LA_content_tone": parse_LA_content_tone,
         "LU_content": parse_LU_content,
         "LU_content_tone": parse_LU_content_tone,
         "MI_content_predicate": parse_MI_content_predicate,
@@ -259,6 +263,10 @@ camxes = (function(){
         "focus": parse_focus,
         "end_statement": parse_end_statement,
         "end_statement_1": parse_end_statement_1,
+        "end_CP": parse_end_CP,
+        "end_CP_1": parse_end_CP_1,
+        "end_LU": parse_end_LU,
+        "end_LU_1": parse_end_LU_1,
         "null": parse_null,
         "illocutionary": parse_illocutionary,
         "illocutionary_1": parse_illocutionary_1,
@@ -278,6 +286,7 @@ camxes = (function(){
         "start_parenthetical": parse_start_parenthetical,
         "end_parenthetical": parse_end_parenthetical,
         "vocative_marker": parse_vocative_marker,
+        "LA": parse_LA,
         "LU": parse_LU,
         "MI": parse_MI,
         "PO": parse_PO,
@@ -613,6 +622,9 @@ camxes = (function(){
         result0 = result0 !== null ? result0 : "";
         if (result0 !== null) {
           result1 = parse_statement();
+          if (result1 === null) {
+            result1 = parse_LA_predication();
+          }
           if (result1 !== null) {
             result2 = parse_spaces();
             result2 = result2 !== null ? result2 : "";
@@ -639,6 +651,93 @@ camxes = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return _node("S", expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_LA_predication() {
+        var cacheKey = "LA_predication@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_LA_predicate_tone();
+        if (result0 !== null) {
+          result1 = parse_spaces();
+          result1 = result1 !== null ? result1 : "";
+          if (result1 !== null) {
+            result2 = parse_predication();
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return _node("predication", expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_LA_predicate_tone() {
+        var cacheKey = "LA_predicate_tone@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_LA();
+        if (result0 !== null) {
+          result1 = parse_verb_tone();
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return ["starter", _join(expr)];})(pos0, result0);
         }
         if (result0 === null) {
           pos = pos0;
@@ -986,37 +1085,82 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3;
+        var result0, result1, result2;
         var pos0, pos1, pos2;
         
         pos0 = pos;
         pos1 = pos;
+        pos2 = pos;
         result0 = parse_k();
         if (result0 !== null) {
           result1 = parse_e();
           if (result1 !== null) {
             result2 = parse_o();
             if (result2 !== null) {
-              pos2 = pos;
-              reportFailures++;
-              result3 = parse_boundary();
-              reportFailures--;
-              if (result3 !== null) {
-                result3 = "";
-                pos = pos2;
-              } else {
-                result3 = null;
-              }
-              if (result3 !== null) {
-                result0 = [result0, result1, result2, result3];
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos2;
+            }
+          } else {
+            result0 = null;
+            pos = pos2;
+          }
+        } else {
+          result0 = null;
+          pos = pos2;
+        }
+        if (result0 === null) {
+          pos2 = pos;
+          result0 = parse_j();
+          if (result0 !== null) {
+            result1 = parse_e();
+            if (result1 !== null) {
+              result0 = [result0, result1];
+            } else {
+              result0 = null;
+              pos = pos2;
+            }
+          } else {
+            result0 = null;
+            pos = pos2;
+          }
+          if (result0 === null) {
+            pos2 = pos;
+            result0 = parse_t();
+            if (result0 !== null) {
+              result1 = parse_i();
+              if (result1 !== null) {
+                result2 = parse_u();
+                if (result2 !== null) {
+                  result0 = [result0, result1, result2];
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
               } else {
                 result0 = null;
-                pos = pos1;
+                pos = pos2;
               }
             } else {
               result0 = null;
-              pos = pos1;
+              pos = pos2;
             }
+          }
+        }
+        if (result0 !== null) {
+          pos2 = pos;
+          reportFailures++;
+          result1 = parse_boundary();
+          reportFailures--;
+          if (result1 !== null) {
+            result1 = "";
+            pos = pos2;
+          } else {
+            result1 = null;
+          }
+          if (result1 !== null) {
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -1024,37 +1168,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_j();
-          if (result0 !== null) {
-            result1 = parse_e();
-            if (result1 !== null) {
-              pos2 = pos;
-              reportFailures++;
-              result2 = parse_boundary();
-              reportFailures--;
-              if (result2 !== null) {
-                result2 = "";
-                pos = pos2;
-              } else {
-                result2 = null;
-              }
-              if (result2 !== null) {
-                result0 = [result0, result1, result2];
-              } else {
-                result0 = null;
-                pos = pos1;
-              }
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["prefix", _join(expr)];})(pos0, result0);
@@ -2136,7 +2249,7 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2;
+        var result0, result1, result2, result3, result4;
         var pos0, pos1;
         
         pos0 = pos;
@@ -2148,7 +2261,21 @@ camxes = (function(){
           if (result1 !== null) {
             result2 = parse_statement();
             if (result2 !== null) {
-              result0 = [result0, result1, result2];
+              result3 = parse_spaces();
+              result3 = result3 !== null ? result3 : "";
+              if (result3 !== null) {
+                result4 = parse_end_LU();
+                result4 = result4 !== null ? result4 : "";
+                if (result4 !== null) {
+                  result0 = [result0, result1, result2, result3, result4];
+                } else {
+                  result0 = null;
+                  pos = pos1;
+                }
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
             } else {
               result0 = null;
               pos = pos1;
@@ -2966,22 +3093,6 @@ camxes = (function(){
             } else {
               result0 = null;
               pos = pos2;
-            }
-            if (result0 === null) {
-              pos2 = pos;
-              result0 = parse_k();
-              if (result0 !== null) {
-                result1 = parse_e();
-                if (result1 !== null) {
-                  result0 = [result0, result1];
-                } else {
-                  result0 = null;
-                  pos = pos2;
-                }
-              } else {
-                result0 = null;
-                pos = pos2;
-              }
             }
           }
         }
@@ -5188,7 +5299,7 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2;
+        var result0, result1, result2, result3, result4;
         var pos0, pos1;
         
         pos0 = pos;
@@ -5200,7 +5311,21 @@ camxes = (function(){
           if (result1 !== null) {
             result2 = parse_statement();
             if (result2 !== null) {
-              result0 = [result0, result1, result2];
+              result3 = parse_spaces();
+              result3 = result3 !== null ? result3 : "";
+              if (result3 !== null) {
+                result4 = parse_end_LU();
+                result4 = result4 !== null ? result4 : "";
+                if (result4 !== null) {
+                  result0 = [result0, result1, result2, result3, result4];
+                } else {
+                  result0 = null;
+                  pos = pos1;
+                }
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
             } else {
               result0 = null;
               pos = pos1;
@@ -9332,7 +9457,7 @@ camxes = (function(){
           result1 = parse_spaces();
           result1 = result1 !== null ? result1 : "";
           if (result1 !== null) {
-            result2 = parse_end_statement();
+            result2 = parse_end_CP();
             result2 = result2 !== null ? result2 : "";
             if (result2 !== null) {
               result0 = [result0, result1, result2];
@@ -9535,13 +9660,16 @@ camxes = (function(){
         var pos0;
         
         pos0 = pos;
-        result0 = parse_MI_content_predicate();
+        result0 = parse_LA_content_predicate();
         if (result0 === null) {
-          result0 = parse_PO_content_predicate();
+          result0 = parse_MI_content_predicate();
           if (result0 === null) {
-            result0 = parse_quotation_content_predicate();
+            result0 = parse_PO_content_predicate();
             if (result0 === null) {
-              result0 = parse_content_predicate_3();
+              result0 = parse_quotation_content_predicate();
+              if (result0 === null) {
+                result0 = parse_content_predicate_3();
+              }
             }
           }
         }
@@ -9844,8 +9972,55 @@ camxes = (function(){
         return result0;
       }
       
-      function parse_LU_content() {
-        var cacheKey = "LU_content@" + pos;
+      function parse_LA_content_predicate() {
+        var cacheKey = "LA_content_predicate@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_LA_content_tone();
+        if (result0 !== null) {
+          result1 = parse_spaces();
+          result1 = result1 !== null ? result1 : "";
+          if (result1 !== null) {
+            result2 = parse_predicate();
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return _node("CP", expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_LA_content_tone() {
+        var cacheKey = "LA_content_tone@" + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
@@ -9857,11 +10032,65 @@ camxes = (function(){
         
         pos0 = pos;
         pos1 = pos;
+        result0 = parse_LA();
+        if (result0 !== null) {
+          result1 = parse_content_tone();
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return ["starter", _join(expr)];})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_LU_content() {
+        var cacheKey = "LU_content@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2, result3;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
         result0 = parse_LU_content_tone();
         if (result0 !== null) {
           result1 = parse_statement();
           if (result1 !== null) {
-            result0 = [result0, result1];
+            result2 = parse_spaces();
+            result2 = result2 !== null ? result2 : "";
+            if (result2 !== null) {
+              result3 = parse_end_LU();
+              result3 = result3 !== null ? result3 : "";
+              if (result3 !== null) {
+                result0 = [result0, result1, result2, result3];
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
           } else {
             result0 = null;
             pos = pos1;
@@ -10414,13 +10643,13 @@ camxes = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        if (input.substr(pos, 2) === "ha") {
-          result0 = "ha";
-          pos += 2;
+        if (input.substr(pos, 4) === "_xxx") {
+          result0 = "_xxx";
+          pos += 4;
         } else {
           result0 = null;
           if (reportFailures === 0) {
-            matchFailed("\"ha\"");
+            matchFailed("\"_xxx\"");
           }
         }
         if (result0 !== null) {
@@ -10573,7 +10802,7 @@ camxes = (function(){
             result2 = parse_freemod();
             result2 = result2 !== null ? result2 : "";
             if (result2 !== null) {
-              result3 = parse_statement();
+              result3 = parse_sentence();
               if (result3 !== null) {
                 result0 = [result0, result1, result2, result3];
               } else {
@@ -10762,26 +10991,55 @@ camxes = (function(){
         
         pos0 = pos;
         pos1 = pos;
+        pos2 = pos;
         result0 = parse_k();
         if (result0 !== null) {
           result1 = parse_u();
           if (result1 !== null) {
-            pos2 = pos;
-            reportFailures++;
-            result2 = parse_boundary();
-            reportFailures--;
-            if (result2 !== null) {
-              result2 = "";
-              pos = pos2;
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos2;
+          }
+        } else {
+          result0 = null;
+          pos = pos2;
+        }
+        if (result0 === null) {
+          pos2 = pos;
+          result0 = parse_t();
+          if (result0 !== null) {
+            result1 = parse_o();
+            if (result1 !== null) {
+              result2 = parse_u();
+              if (result2 !== null) {
+                result0 = [result0, result1, result2];
+              } else {
+                result0 = null;
+                pos = pos2;
+              }
             } else {
               result0 = null;
-              pos = pos1;
+              pos = pos2;
             }
+          } else {
+            result0 = null;
+            pos = pos2;
+          }
+        }
+        if (result0 !== null) {
+          pos2 = pos;
+          reportFailures++;
+          result1 = parse_boundary();
+          reportFailures--;
+          if (result1 !== null) {
+            result1 = "";
+            pos = pos2;
+          } else {
+            result1 = null;
+          }
+          if (result1 !== null) {
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -10861,6 +11119,198 @@ camxes = (function(){
         result0 = parse_n();
         if (result0 !== null) {
           result1 = parse_a();
+          if (result1 !== null) {
+            pos2 = pos;
+            reportFailures++;
+            result2 = parse_boundary();
+            reportFailures--;
+            if (result2 !== null) {
+              result2 = "";
+              pos = pos2;
+            } else {
+              result2 = null;
+            }
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return ["end_1", _join(expr)];})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_end_CP() {
+        var cacheKey = "end_CP@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_end_CP_1();
+        if (result0 !== null) {
+          result1 = parse_freemod();
+          result1 = result1 !== null ? result1 : "";
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return _node("end", expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_end_CP_1() {
+        var cacheKey = "end_CP_1@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2;
+        var pos0, pos1, pos2;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_c();
+        if (result0 !== null) {
+          result1 = parse_y();
+          if (result1 !== null) {
+            pos2 = pos;
+            reportFailures++;
+            result2 = parse_boundary();
+            reportFailures--;
+            if (result2 !== null) {
+              result2 = "";
+              pos = pos2;
+            } else {
+              result2 = null;
+            }
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return ["end_1", _join(expr)];})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_end_LU() {
+        var cacheKey = "end_LU@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_end_LU_1();
+        if (result0 !== null) {
+          result1 = parse_freemod();
+          result1 = result1 !== null ? result1 : "";
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return _node("end", expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_end_LU_1() {
+        var cacheKey = "end_LU_1@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2;
+        var pos0, pos1, pos2;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_k();
+        if (result0 !== null) {
+          result1 = parse_y();
           if (result1 !== null) {
             pos2 = pos;
             reportFailures++;
@@ -11005,11 +11455,17 @@ camxes = (function(){
           }
           if (result0 === null) {
             pos2 = pos;
-            result0 = parse_k();
+            result0 = parse_n();
             if (result0 !== null) {
-              result1 = parse_a();
+              result1 = parse_h();
               if (result1 !== null) {
-                result0 = [result0, result1];
+                result2 = parse_a();
+                if (result2 !== null) {
+                  result0 = [result0, result1, result2];
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
               } else {
                 result0 = null;
                 pos = pos2;
@@ -11020,9 +11476,9 @@ camxes = (function(){
             }
             if (result0 === null) {
               pos2 = pos;
-              result0 = parse_s();
+              result0 = parse_k();
               if (result0 !== null) {
-                result1 = parse_o();
+                result1 = parse_a();
                 if (result1 !== null) {
                   result0 = [result0, result1];
                 } else {
@@ -11179,6 +11635,44 @@ camxes = (function(){
                 } else {
                   result0 = null;
                   pos = pos2;
+                }
+                if (result0 === null) {
+                  pos2 = pos;
+                  result0 = parse_k();
+                  if (result0 !== null) {
+                    result1 = parse_e();
+                    if (result1 !== null) {
+                      result0 = [result0, result1];
+                    } else {
+                      result0 = null;
+                      pos = pos2;
+                    }
+                  } else {
+                    result0 = null;
+                    pos = pos2;
+                  }
+                  if (result0 === null) {
+                    pos2 = pos;
+                    result0 = parse_b();
+                    if (result0 !== null) {
+                      result1 = parse_a();
+                      if (result1 !== null) {
+                        result2 = parse_q();
+                        if (result2 !== null) {
+                          result0 = [result0, result1, result2];
+                        } else {
+                          result0 = null;
+                          pos = pos2;
+                        }
+                      } else {
+                        result0 = null;
+                        pos = pos2;
+                      }
+                    } else {
+                      result0 = null;
+                      pos = pos2;
+                    }
+                  }
                 }
               }
             }
@@ -11346,13 +11840,13 @@ camxes = (function(){
         var pos0;
         
         pos0 = pos;
-        if (/^[V3]/.test(input.charAt(pos))) {
+        if (/^[V"3]/.test(input.charAt(pos))) {
           result0 = input.charAt(pos);
           pos++;
         } else {
           result0 = null;
           if (reportFailures === 0) {
-            matchFailed("[V3]");
+            matchFailed("[V\"3]");
           }
         }
         if (result0 !== null) {
@@ -11588,21 +12082,24 @@ camxes = (function(){
                       if (result0 === null) {
                         result0 = parse_end_prenex();
                         if (result0 === null) {
-                          result0 = parse_LU();
+                          result0 = parse_LA();
                           if (result0 === null) {
-                            result0 = parse_MI();
+                            result0 = parse_LU();
                             if (result0 === null) {
-                              result0 = parse_PO();
+                              result0 = parse_MI();
                               if (result0 === null) {
-                                result0 = parse_MO();
+                                result0 = parse_PO();
                                 if (result0 === null) {
-                                  result0 = parse_TEO();
+                                  result0 = parse_MO();
                                   if (result0 === null) {
-                                    result0 = parse_GA();
+                                    result0 = parse_TEO();
                                     if (result0 === null) {
-                                      result0 = parse_linking_word();
+                                      result0 = parse_GA();
                                       if (result0 === null) {
-                                        result0 = parse_vocative();
+                                        result0 = parse_linking_word();
+                                        if (result0 === null) {
+                                          result0 = parse_vocative();
+                                        }
                                       }
                                     }
                                   }
@@ -11937,8 +12434,8 @@ camxes = (function(){
         return result0;
       }
       
-      function parse_LU() {
-        var cacheKey = "LU@" + pos;
+      function parse_LA() {
+        var cacheKey = "LA@" + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
@@ -11953,7 +12450,7 @@ camxes = (function(){
         pos2 = pos;
         result0 = parse_l();
         if (result0 !== null) {
-          result1 = parse_u();
+          result1 = parse_a();
           if (result1 !== null) {
             result0 = [result0, result1];
           } else {
@@ -11966,9 +12463,9 @@ camxes = (function(){
         }
         if (result0 === null) {
           pos2 = pos;
-          result0 = parse_l();
+          result0 = parse_m();
           if (result0 !== null) {
-            result1 = parse_i();
+            result1 = parse_a();
             if (result1 !== null) {
               result0 = [result0, result1];
             } else {
@@ -11981,11 +12478,17 @@ camxes = (function(){
           }
           if (result0 === null) {
             pos2 = pos;
-            result0 = parse_l();
+            result0 = parse_t();
             if (result0 !== null) {
-              result1 = parse_o();
+              result1 = parse_i();
               if (result1 !== null) {
-                result0 = [result0, result1];
+                result2 = parse_o();
+                if (result2 !== null) {
+                  result0 = [result0, result1, result2];
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
               } else {
                 result0 = null;
                 pos = pos2;
@@ -11993,44 +12496,6 @@ camxes = (function(){
             } else {
               result0 = null;
               pos = pos2;
-            }
-            if (result0 === null) {
-              pos2 = pos;
-              result0 = parse_m();
-              if (result0 !== null) {
-                result1 = parse_a();
-                if (result1 !== null) {
-                  result0 = [result0, result1];
-                } else {
-                  result0 = null;
-                  pos = pos2;
-                }
-              } else {
-                result0 = null;
-                pos = pos2;
-              }
-              if (result0 === null) {
-                pos2 = pos;
-                result0 = parse_t();
-                if (result0 !== null) {
-                  result1 = parse_i();
-                  if (result1 !== null) {
-                    result2 = parse_o();
-                    if (result2 !== null) {
-                      result0 = [result0, result1, result2];
-                    } else {
-                      result0 = null;
-                      pos = pos2;
-                    }
-                  } else {
-                    result0 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result0 = null;
-                  pos = pos2;
-                }
-              }
             }
           }
         }
@@ -12047,6 +12512,61 @@ camxes = (function(){
           }
           if (result1 !== null) {
             result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, expr) {return _join(expr);})(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_LU() {
+        var cacheKey = "LU@" + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        var result0, result1, result2;
+        var pos0, pos1, pos2;
+        
+        pos0 = pos;
+        pos1 = pos;
+        result0 = parse_l();
+        if (result0 !== null) {
+          result1 = parse_u();
+          if (result1 !== null) {
+            pos2 = pos;
+            reportFailures++;
+            result2 = parse_boundary();
+            reportFailures--;
+            if (result2 !== null) {
+              result2 = "";
+              pos = pos2;
+            } else {
+              result2 = null;
+            }
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
           } else {
             result0 = null;
             pos = pos1;
@@ -12518,30 +13038,46 @@ camxes = (function(){
                           if (result0 === null) {
                             result0 = parse_m();
                             if (result0 === null) {
+                              pos1 = pos;
                               result0 = parse_n();
+                              if (result0 !== null) {
+                                result1 = parse_h();
+                                if (result1 !== null) {
+                                  result0 = [result0, result1];
+                                } else {
+                                  result0 = null;
+                                  pos = pos1;
+                                }
+                              } else {
+                                result0 = null;
+                                pos = pos1;
+                              }
                               if (result0 === null) {
-                                result0 = parse_p();
+                                result0 = parse_n();
                                 if (result0 === null) {
-                                  result0 = parse_r();
+                                  result0 = parse_p();
                                   if (result0 === null) {
-                                    pos1 = pos;
-                                    result0 = parse_s();
-                                    if (result0 !== null) {
-                                      result1 = parse_h();
-                                      if (result1 !== null) {
-                                        result0 = [result0, result1];
+                                    result0 = parse_r();
+                                    if (result0 === null) {
+                                      pos1 = pos;
+                                      result0 = parse_s();
+                                      if (result0 !== null) {
+                                        result1 = parse_h();
+                                        if (result1 !== null) {
+                                          result0 = [result0, result1];
+                                        } else {
+                                          result0 = null;
+                                          pos = pos1;
+                                        }
                                       } else {
                                         result0 = null;
                                         pos = pos1;
                                       }
-                                    } else {
-                                      result0 = null;
-                                      pos = pos1;
-                                    }
-                                    if (result0 === null) {
-                                      result0 = parse_s();
                                       if (result0 === null) {
-                                        result0 = parse_t();
+                                        result0 = parse_s();
+                                        if (result0 === null) {
+                                          result0 = parse_t();
+                                        }
                                       }
                                     }
                                   }
@@ -12587,7 +13123,7 @@ camxes = (function(){
         pos1 = pos;
         result0 = parse_a();
         if (result0 !== null) {
-          result1 = parse_o();
+          result1 = parse_y();
           if (result1 !== null) {
             result0 = [result0, result1];
           } else {
@@ -12602,7 +13138,7 @@ camxes = (function(){
           pos1 = pos;
           result0 = parse_a();
           if (result0 !== null) {
-            result1 = parse_i();
+            result1 = parse_o();
             if (result1 !== null) {
               result0 = [result0, result1];
             } else {
@@ -12617,7 +13153,7 @@ camxes = (function(){
             pos1 = pos;
             result0 = parse_a();
             if (result0 !== null) {
-              result1 = parse_q();
+              result1 = parse_i();
               if (result1 !== null) {
                 result0 = [result0, result1];
               } else {
@@ -12629,41 +13165,29 @@ camxes = (function(){
               pos = pos1;
             }
             if (result0 === null) {
+              pos1 = pos;
               result0 = parse_a();
-              if (result0 === null) {
-                pos1 = pos;
-                result0 = parse_u();
-                if (result0 !== null) {
-                  result1 = parse_a();
-                  if (result1 !== null) {
-                    result2 = parse_o();
-                    if (result2 !== null) {
-                      result0 = [result0, result1, result2];
-                    } else {
-                      result0 = null;
-                      pos = pos1;
-                    }
-                  } else {
-                    result0 = null;
-                    pos = pos1;
-                  }
+              if (result0 !== null) {
+                result1 = parse_q();
+                if (result1 !== null) {
+                  result0 = [result0, result1];
                 } else {
                   result0 = null;
                   pos = pos1;
                 }
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
+              if (result0 === null) {
+                result0 = parse_a();
                 if (result0 === null) {
                   pos1 = pos;
                   result0 = parse_u();
                   if (result0 !== null) {
-                    result1 = parse_a();
+                    result1 = parse_y();
                     if (result1 !== null) {
-                      result2 = parse_i();
-                      if (result2 !== null) {
-                        result0 = [result0, result1, result2];
-                      } else {
-                        result0 = null;
-                        pos = pos1;
-                      }
+                      result0 = [result0, result1];
                     } else {
                       result0 = null;
                       pos = pos1;
@@ -12676,9 +13200,9 @@ camxes = (function(){
                     pos1 = pos;
                     result0 = parse_u();
                     if (result0 !== null) {
-                      result1 = parse_e();
+                      result1 = parse_a();
                       if (result1 !== null) {
-                        result2 = parse_q();
+                        result2 = parse_o();
                         if (result2 !== null) {
                           result0 = [result0, result1, result2];
                         } else {
@@ -12697,9 +13221,15 @@ camxes = (function(){
                       pos1 = pos;
                       result0 = parse_u();
                       if (result0 !== null) {
-                        result1 = parse_e();
+                        result1 = parse_a();
                         if (result1 !== null) {
-                          result0 = [result0, result1];
+                          result2 = parse_i();
+                          if (result2 !== null) {
+                            result0 = [result0, result1, result2];
+                          } else {
+                            result0 = null;
+                            pos = pos1;
+                          }
                         } else {
                           result0 = null;
                           pos = pos1;
@@ -12712,7 +13242,7 @@ camxes = (function(){
                         pos1 = pos;
                         result0 = parse_u();
                         if (result0 !== null) {
-                          result1 = parse_o();
+                          result1 = parse_e();
                           if (result1 !== null) {
                             result2 = parse_q();
                             if (result2 !== null) {
@@ -12733,7 +13263,7 @@ camxes = (function(){
                           pos1 = pos;
                           result0 = parse_u();
                           if (result0 !== null) {
-                            result1 = parse_o();
+                            result1 = parse_e();
                             if (result1 !== null) {
                               result0 = [result0, result1];
                             } else {
@@ -12748,9 +13278,15 @@ camxes = (function(){
                             pos1 = pos;
                             result0 = parse_u();
                             if (result0 !== null) {
-                              result1 = parse_i();
+                              result1 = parse_o();
                               if (result1 !== null) {
-                                result0 = [result0, result1];
+                                result2 = parse_i();
+                                if (result2 !== null) {
+                                  result0 = [result0, result1, result2];
+                                } else {
+                                  result0 = null;
+                                  pos = pos1;
+                                }
                               } else {
                                 result0 = null;
                                 pos = pos1;
@@ -12763,7 +13299,7 @@ camxes = (function(){
                               pos1 = pos;
                               result0 = parse_u();
                               if (result0 !== null) {
-                                result1 = parse_a();
+                                result1 = parse_o();
                                 if (result1 !== null) {
                                   result2 = parse_q();
                                   if (result2 !== null) {
@@ -12784,7 +13320,7 @@ camxes = (function(){
                                 pos1 = pos;
                                 result0 = parse_u();
                                 if (result0 !== null) {
-                                  result1 = parse_a();
+                                  result1 = parse_o();
                                   if (result1 !== null) {
                                     result0 = [result0, result1];
                                   } else {
@@ -12799,7 +13335,7 @@ camxes = (function(){
                                   pos1 = pos;
                                   result0 = parse_u();
                                   if (result0 !== null) {
-                                    result1 = parse_q();
+                                    result1 = parse_i();
                                     if (result1 !== null) {
                                       result0 = [result0, result1];
                                     } else {
@@ -12811,20 +13347,33 @@ camxes = (function(){
                                     pos = pos1;
                                   }
                                   if (result0 === null) {
+                                    pos1 = pos;
                                     result0 = parse_u();
+                                    if (result0 !== null) {
+                                      result1 = parse_a();
+                                      if (result1 !== null) {
+                                        result2 = parse_q();
+                                        if (result2 !== null) {
+                                          result0 = [result0, result1, result2];
+                                        } else {
+                                          result0 = null;
+                                          pos = pos1;
+                                        }
+                                      } else {
+                                        result0 = null;
+                                        pos = pos1;
+                                      }
+                                    } else {
+                                      result0 = null;
+                                      pos = pos1;
+                                    }
                                     if (result0 === null) {
                                       pos1 = pos;
-                                      result0 = parse_i();
+                                      result0 = parse_u();
                                       if (result0 !== null) {
                                         result1 = parse_a();
                                         if (result1 !== null) {
-                                          result2 = parse_o();
-                                          if (result2 !== null) {
-                                            result0 = [result0, result1, result2];
-                                          } else {
-                                            result0 = null;
-                                            pos = pos1;
-                                          }
+                                          result0 = [result0, result1];
                                         } else {
                                           result0 = null;
                                           pos = pos1;
@@ -12835,17 +13384,11 @@ camxes = (function(){
                                       }
                                       if (result0 === null) {
                                         pos1 = pos;
-                                        result0 = parse_i();
+                                        result0 = parse_u();
                                         if (result0 !== null) {
-                                          result1 = parse_a();
+                                          result1 = parse_q();
                                           if (result1 !== null) {
-                                            result2 = parse_i();
-                                            if (result2 !== null) {
-                                              result0 = [result0, result1, result2];
-                                            } else {
-                                              result0 = null;
-                                              pos = pos1;
-                                            }
+                                            result0 = [result0, result1];
                                           } else {
                                             result0 = null;
                                             pos = pos1;
@@ -12855,31 +13398,12 @@ camxes = (function(){
                                           pos = pos1;
                                         }
                                         if (result0 === null) {
-                                          pos1 = pos;
-                                          result0 = parse_i();
-                                          if (result0 !== null) {
-                                            result1 = parse_e();
-                                            if (result1 !== null) {
-                                              result2 = parse_q();
-                                              if (result2 !== null) {
-                                                result0 = [result0, result1, result2];
-                                              } else {
-                                                result0 = null;
-                                                pos = pos1;
-                                              }
-                                            } else {
-                                              result0 = null;
-                                              pos = pos1;
-                                            }
-                                          } else {
-                                            result0 = null;
-                                            pos = pos1;
-                                          }
+                                          result0 = parse_u();
                                           if (result0 === null) {
                                             pos1 = pos;
                                             result0 = parse_i();
                                             if (result0 !== null) {
-                                              result1 = parse_e();
+                                              result1 = parse_y();
                                               if (result1 !== null) {
                                                 result0 = [result0, result1];
                                               } else {
@@ -12894,9 +13418,9 @@ camxes = (function(){
                                               pos1 = pos;
                                               result0 = parse_i();
                                               if (result0 !== null) {
-                                                result1 = parse_o();
+                                                result1 = parse_a();
                                                 if (result1 !== null) {
-                                                  result2 = parse_q();
+                                                  result2 = parse_o();
                                                   if (result2 !== null) {
                                                     result0 = [result0, result1, result2];
                                                   } else {
@@ -12915,9 +13439,15 @@ camxes = (function(){
                                                 pos1 = pos;
                                                 result0 = parse_i();
                                                 if (result0 !== null) {
-                                                  result1 = parse_o();
+                                                  result1 = parse_a();
                                                   if (result1 !== null) {
-                                                    result0 = [result0, result1];
+                                                    result2 = parse_i();
+                                                    if (result2 !== null) {
+                                                      result0 = [result0, result1, result2];
+                                                    } else {
+                                                      result0 = null;
+                                                      pos = pos1;
+                                                    }
                                                   } else {
                                                     result0 = null;
                                                     pos = pos1;
@@ -12930,9 +13460,15 @@ camxes = (function(){
                                                   pos1 = pos;
                                                   result0 = parse_i();
                                                   if (result0 !== null) {
-                                                    result1 = parse_u();
+                                                    result1 = parse_e();
                                                     if (result1 !== null) {
-                                                      result0 = [result0, result1];
+                                                      result2 = parse_q();
+                                                      if (result2 !== null) {
+                                                        result0 = [result0, result1, result2];
+                                                      } else {
+                                                        result0 = null;
+                                                        pos = pos1;
+                                                      }
                                                     } else {
                                                       result0 = null;
                                                       pos = pos1;
@@ -12945,15 +13481,9 @@ camxes = (function(){
                                                     pos1 = pos;
                                                     result0 = parse_i();
                                                     if (result0 !== null) {
-                                                      result1 = parse_a();
+                                                      result1 = parse_e();
                                                       if (result1 !== null) {
-                                                        result2 = parse_q();
-                                                        if (result2 !== null) {
-                                                          result0 = [result0, result1, result2];
-                                                        } else {
-                                                          result0 = null;
-                                                          pos = pos1;
-                                                        }
+                                                        result0 = [result0, result1];
                                                       } else {
                                                         result0 = null;
                                                         pos = pos1;
@@ -12966,9 +13496,15 @@ camxes = (function(){
                                                       pos1 = pos;
                                                       result0 = parse_i();
                                                       if (result0 !== null) {
-                                                        result1 = parse_a();
+                                                        result1 = parse_o();
                                                         if (result1 !== null) {
-                                                          result0 = [result0, result1];
+                                                          result2 = parse_i();
+                                                          if (result2 !== null) {
+                                                            result0 = [result0, result1, result2];
+                                                          } else {
+                                                            result0 = null;
+                                                            pos = pos1;
+                                                          }
                                                         } else {
                                                           result0 = null;
                                                           pos = pos1;
@@ -12981,9 +13517,15 @@ camxes = (function(){
                                                         pos1 = pos;
                                                         result0 = parse_i();
                                                         if (result0 !== null) {
-                                                          result1 = parse_q();
+                                                          result1 = parse_o();
                                                           if (result1 !== null) {
-                                                            result0 = [result0, result1];
+                                                            result2 = parse_q();
+                                                            if (result2 !== null) {
+                                                              result0 = [result0, result1, result2];
+                                                            } else {
+                                                              result0 = null;
+                                                              pos = pos1;
+                                                            }
                                                           } else {
                                                             result0 = null;
                                                             pos = pos1;
@@ -12993,20 +13535,27 @@ camxes = (function(){
                                                           pos = pos1;
                                                         }
                                                         if (result0 === null) {
+                                                          pos1 = pos;
                                                           result0 = parse_i();
+                                                          if (result0 !== null) {
+                                                            result1 = parse_o();
+                                                            if (result1 !== null) {
+                                                              result0 = [result0, result1];
+                                                            } else {
+                                                              result0 = null;
+                                                              pos = pos1;
+                                                            }
+                                                          } else {
+                                                            result0 = null;
+                                                            pos = pos1;
+                                                          }
                                                           if (result0 === null) {
                                                             pos1 = pos;
-                                                            result0 = parse_o();
+                                                            result0 = parse_i();
                                                             if (result0 !== null) {
-                                                              result1 = parse_e();
+                                                              result1 = parse_u();
                                                               if (result1 !== null) {
-                                                                result2 = parse_q();
-                                                                if (result2 !== null) {
-                                                                  result0 = [result0, result1, result2];
-                                                                } else {
-                                                                  result0 = null;
-                                                                  pos = pos1;
-                                                                }
+                                                                result0 = [result0, result1];
                                                               } else {
                                                                 result0 = null;
                                                                 pos = pos1;
@@ -13017,11 +13566,17 @@ camxes = (function(){
                                                             }
                                                             if (result0 === null) {
                                                               pos1 = pos;
-                                                              result0 = parse_o();
+                                                              result0 = parse_i();
                                                               if (result0 !== null) {
-                                                                result1 = parse_e();
+                                                                result1 = parse_a();
                                                                 if (result1 !== null) {
-                                                                  result0 = [result0, result1];
+                                                                  result2 = parse_q();
+                                                                  if (result2 !== null) {
+                                                                    result0 = [result0, result1, result2];
+                                                                  } else {
+                                                                    result0 = null;
+                                                                    pos = pos1;
+                                                                  }
                                                                 } else {
                                                                   result0 = null;
                                                                   pos = pos1;
@@ -13032,9 +13587,9 @@ camxes = (function(){
                                                               }
                                                               if (result0 === null) {
                                                                 pos1 = pos;
-                                                                result0 = parse_o();
+                                                                result0 = parse_i();
                                                                 if (result0 !== null) {
-                                                                  result1 = parse_i();
+                                                                  result1 = parse_a();
                                                                   if (result1 !== null) {
                                                                     result0 = [result0, result1];
                                                                   } else {
@@ -13047,17 +13602,11 @@ camxes = (function(){
                                                                 }
                                                                 if (result0 === null) {
                                                                   pos1 = pos;
-                                                                  result0 = parse_o();
+                                                                  result0 = parse_i();
                                                                   if (result0 !== null) {
-                                                                    result1 = parse_a();
+                                                                    result1 = parse_q();
                                                                     if (result1 !== null) {
-                                                                      result2 = parse_q();
-                                                                      if (result2 !== null) {
-                                                                        result0 = [result0, result1, result2];
-                                                                      } else {
-                                                                        result0 = null;
-                                                                        pos = pos1;
-                                                                      }
+                                                                      result0 = [result0, result1];
                                                                     } else {
                                                                       result0 = null;
                                                                       pos = pos1;
@@ -13067,25 +13616,12 @@ camxes = (function(){
                                                                     pos = pos1;
                                                                   }
                                                                   if (result0 === null) {
-                                                                    pos1 = pos;
-                                                                    result0 = parse_o();
-                                                                    if (result0 !== null) {
-                                                                      result1 = parse_a();
-                                                                      if (result1 !== null) {
-                                                                        result0 = [result0, result1];
-                                                                      } else {
-                                                                        result0 = null;
-                                                                        pos = pos1;
-                                                                      }
-                                                                    } else {
-                                                                      result0 = null;
-                                                                      pos = pos1;
-                                                                    }
+                                                                    result0 = parse_i();
                                                                     if (result0 === null) {
                                                                       pos1 = pos;
                                                                       result0 = parse_o();
                                                                       if (result0 !== null) {
-                                                                        result1 = parse_q();
+                                                                        result1 = parse_y();
                                                                         if (result1 !== null) {
                                                                           result0 = [result0, result1];
                                                                         } else {
@@ -13097,20 +13633,33 @@ camxes = (function(){
                                                                         pos = pos1;
                                                                       }
                                                                       if (result0 === null) {
+                                                                        pos1 = pos;
                                                                         result0 = parse_o();
+                                                                        if (result0 !== null) {
+                                                                          result1 = parse_e();
+                                                                          if (result1 !== null) {
+                                                                            result2 = parse_q();
+                                                                            if (result2 !== null) {
+                                                                              result0 = [result0, result1, result2];
+                                                                            } else {
+                                                                              result0 = null;
+                                                                              pos = pos1;
+                                                                            }
+                                                                          } else {
+                                                                            result0 = null;
+                                                                            pos = pos1;
+                                                                          }
+                                                                        } else {
+                                                                          result0 = null;
+                                                                          pos = pos1;
+                                                                        }
                                                                         if (result0 === null) {
                                                                           pos1 = pos;
-                                                                          result0 = parse_e();
+                                                                          result0 = parse_o();
                                                                           if (result0 !== null) {
-                                                                            result1 = parse_o();
+                                                                            result1 = parse_e();
                                                                             if (result1 !== null) {
-                                                                              result2 = parse_q();
-                                                                              if (result2 !== null) {
-                                                                                result0 = [result0, result1, result2];
-                                                                              } else {
-                                                                                result0 = null;
-                                                                                pos = pos1;
-                                                                              }
+                                                                              result0 = [result0, result1];
                                                                             } else {
                                                                               result0 = null;
                                                                               pos = pos1;
@@ -13121,9 +13670,9 @@ camxes = (function(){
                                                                           }
                                                                           if (result0 === null) {
                                                                             pos1 = pos;
-                                                                            result0 = parse_e();
+                                                                            result0 = parse_o();
                                                                             if (result0 !== null) {
-                                                                              result1 = parse_o();
+                                                                              result1 = parse_i();
                                                                               if (result1 !== null) {
                                                                                 result0 = [result0, result1];
                                                                               } else {
@@ -13136,11 +13685,17 @@ camxes = (function(){
                                                                             }
                                                                             if (result0 === null) {
                                                                               pos1 = pos;
-                                                                              result0 = parse_e();
+                                                                              result0 = parse_o();
                                                                               if (result0 !== null) {
-                                                                                result1 = parse_i();
+                                                                                result1 = parse_a();
                                                                                 if (result1 !== null) {
-                                                                                  result0 = [result0, result1];
+                                                                                  result2 = parse_i();
+                                                                                  if (result2 !== null) {
+                                                                                    result0 = [result0, result1, result2];
+                                                                                  } else {
+                                                                                    result0 = null;
+                                                                                    pos = pos1;
+                                                                                  }
                                                                                 } else {
                                                                                   result0 = null;
                                                                                   pos = pos1;
@@ -13151,7 +13706,7 @@ camxes = (function(){
                                                                               }
                                                                               if (result0 === null) {
                                                                                 pos1 = pos;
-                                                                                result0 = parse_e();
+                                                                                result0 = parse_o();
                                                                                 if (result0 !== null) {
                                                                                   result1 = parse_a();
                                                                                   if (result1 !== null) {
@@ -13172,7 +13727,7 @@ camxes = (function(){
                                                                                 }
                                                                                 if (result0 === null) {
                                                                                   pos1 = pos;
-                                                                                  result0 = parse_e();
+                                                                                  result0 = parse_o();
                                                                                   if (result0 !== null) {
                                                                                     result1 = parse_a();
                                                                                     if (result1 !== null) {
@@ -13187,7 +13742,7 @@ camxes = (function(){
                                                                                   }
                                                                                   if (result0 === null) {
                                                                                     pos1 = pos;
-                                                                                    result0 = parse_e();
+                                                                                    result0 = parse_o();
                                                                                     if (result0 !== null) {
                                                                                       result1 = parse_q();
                                                                                       if (result1 !== null) {
@@ -13201,7 +13756,191 @@ camxes = (function(){
                                                                                       pos = pos1;
                                                                                     }
                                                                                     if (result0 === null) {
-                                                                                      result0 = parse_e();
+                                                                                      pos1 = pos;
+                                                                                      result0 = parse_o();
+                                                                                      if (result0 !== null) {
+                                                                                        result1 = parse_u();
+                                                                                        if (result1 !== null) {
+                                                                                          result0 = [result0, result1];
+                                                                                        } else {
+                                                                                          result0 = null;
+                                                                                          pos = pos1;
+                                                                                        }
+                                                                                      } else {
+                                                                                        result0 = null;
+                                                                                        pos = pos1;
+                                                                                      }
+                                                                                      if (result0 === null) {
+                                                                                        result0 = parse_o();
+                                                                                        if (result0 === null) {
+                                                                                          pos1 = pos;
+                                                                                          result0 = parse_e();
+                                                                                          if (result0 !== null) {
+                                                                                            result1 = parse_y();
+                                                                                            if (result1 !== null) {
+                                                                                              result0 = [result0, result1];
+                                                                                            } else {
+                                                                                              result0 = null;
+                                                                                              pos = pos1;
+                                                                                            }
+                                                                                          } else {
+                                                                                            result0 = null;
+                                                                                            pos = pos1;
+                                                                                          }
+                                                                                          if (result0 === null) {
+                                                                                            pos1 = pos;
+                                                                                            result0 = parse_e();
+                                                                                            if (result0 !== null) {
+                                                                                              result1 = parse_o();
+                                                                                              if (result1 !== null) {
+                                                                                                result2 = parse_q();
+                                                                                                if (result2 !== null) {
+                                                                                                  result0 = [result0, result1, result2];
+                                                                                                } else {
+                                                                                                  result0 = null;
+                                                                                                  pos = pos1;
+                                                                                                }
+                                                                                              } else {
+                                                                                                result0 = null;
+                                                                                                pos = pos1;
+                                                                                              }
+                                                                                            } else {
+                                                                                              result0 = null;
+                                                                                              pos = pos1;
+                                                                                            }
+                                                                                            if (result0 === null) {
+                                                                                              pos1 = pos;
+                                                                                              result0 = parse_e();
+                                                                                              if (result0 !== null) {
+                                                                                                result1 = parse_o();
+                                                                                                if (result1 !== null) {
+                                                                                                  result0 = [result0, result1];
+                                                                                                } else {
+                                                                                                  result0 = null;
+                                                                                                  pos = pos1;
+                                                                                                }
+                                                                                              } else {
+                                                                                                result0 = null;
+                                                                                                pos = pos1;
+                                                                                              }
+                                                                                              if (result0 === null) {
+                                                                                                pos1 = pos;
+                                                                                                result0 = parse_e();
+                                                                                                if (result0 !== null) {
+                                                                                                  result1 = parse_i();
+                                                                                                  if (result1 !== null) {
+                                                                                                    result0 = [result0, result1];
+                                                                                                  } else {
+                                                                                                    result0 = null;
+                                                                                                    pos = pos1;
+                                                                                                  }
+                                                                                                } else {
+                                                                                                  result0 = null;
+                                                                                                  pos = pos1;
+                                                                                                }
+                                                                                                if (result0 === null) {
+                                                                                                  pos1 = pos;
+                                                                                                  result0 = parse_e();
+                                                                                                  if (result0 !== null) {
+                                                                                                    result1 = parse_a();
+                                                                                                    if (result1 !== null) {
+                                                                                                      result2 = parse_i();
+                                                                                                      if (result2 !== null) {
+                                                                                                        result0 = [result0, result1, result2];
+                                                                                                      } else {
+                                                                                                        result0 = null;
+                                                                                                        pos = pos1;
+                                                                                                      }
+                                                                                                    } else {
+                                                                                                      result0 = null;
+                                                                                                      pos = pos1;
+                                                                                                    }
+                                                                                                  } else {
+                                                                                                    result0 = null;
+                                                                                                    pos = pos1;
+                                                                                                  }
+                                                                                                  if (result0 === null) {
+                                                                                                    pos1 = pos;
+                                                                                                    result0 = parse_e();
+                                                                                                    if (result0 !== null) {
+                                                                                                      result1 = parse_a();
+                                                                                                      if (result1 !== null) {
+                                                                                                        result2 = parse_q();
+                                                                                                        if (result2 !== null) {
+                                                                                                          result0 = [result0, result1, result2];
+                                                                                                        } else {
+                                                                                                          result0 = null;
+                                                                                                          pos = pos1;
+                                                                                                        }
+                                                                                                      } else {
+                                                                                                        result0 = null;
+                                                                                                        pos = pos1;
+                                                                                                      }
+                                                                                                    } else {
+                                                                                                      result0 = null;
+                                                                                                      pos = pos1;
+                                                                                                    }
+                                                                                                    if (result0 === null) {
+                                                                                                      pos1 = pos;
+                                                                                                      result0 = parse_e();
+                                                                                                      if (result0 !== null) {
+                                                                                                        result1 = parse_a();
+                                                                                                        if (result1 !== null) {
+                                                                                                          result0 = [result0, result1];
+                                                                                                        } else {
+                                                                                                          result0 = null;
+                                                                                                          pos = pos1;
+                                                                                                        }
+                                                                                                      } else {
+                                                                                                        result0 = null;
+                                                                                                        pos = pos1;
+                                                                                                      }
+                                                                                                      if (result0 === null) {
+                                                                                                        pos1 = pos;
+                                                                                                        result0 = parse_e();
+                                                                                                        if (result0 !== null) {
+                                                                                                          result1 = parse_q();
+                                                                                                          if (result1 !== null) {
+                                                                                                            result0 = [result0, result1];
+                                                                                                          } else {
+                                                                                                            result0 = null;
+                                                                                                            pos = pos1;
+                                                                                                          }
+                                                                                                        } else {
+                                                                                                          result0 = null;
+                                                                                                          pos = pos1;
+                                                                                                        }
+                                                                                                        if (result0 === null) {
+                                                                                                          result0 = parse_e();
+                                                                                                          if (result0 === null) {
+                                                                                                            result0 = parse_y();
+                                                                                                            if (result0 === null) {
+                                                                                                              pos1 = pos;
+                                                                                                              result0 = parse_y();
+                                                                                                              if (result0 !== null) {
+                                                                                                                result1 = parse_q();
+                                                                                                                if (result1 !== null) {
+                                                                                                                  result0 = [result0, result1];
+                                                                                                                } else {
+                                                                                                                  result0 = null;
+                                                                                                                  pos = pos1;
+                                                                                                                }
+                                                                                                              } else {
+                                                                                                                result0 = null;
+                                                                                                                pos = pos1;
+                                                                                                              }
+                                                                                                            }
+                                                                                                          }
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
                                                                                     }
                                                                                   }
                                                                                 }
@@ -13276,6 +14015,9 @@ camxes = (function(){
               result0 = parse_o();
               if (result0 === null) {
                 result0 = parse_u();
+                if (result0 === null) {
+                  result0 = parse_y();
+                }
               }
             }
           }
