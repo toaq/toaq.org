@@ -1,67 +1,25 @@
 <html>
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-125924205-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-125924205-1');
-</script>
 	<link rel="canonical" href="http://mshang.ca/syntree" />
 	<title>Toaq Parser</title>
-
-	<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-25344866-1']);
-	_gaq.push(['_trackPageview']);
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-	</script>
+	<meta charset="utf-8" />
 </head>
-
-
 <body background="bgimg4.jpg" bgcolor="#333333"> 
-<meta charset='utf-8' />
-
-
-<!--
-<div style="display:block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:	#84cfba;"
-     height="24em">
-  <pre style="white-space: pre-wrap;"><code id="parse_result" width="100%" height="100%"> </code></pre>
-  
-</div>
--->
 
 <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="toaqlanguage.js"></script>
 <script type="text/javascript" src="camxes_preproc.js"></script>
 <script type="text/javascript" src="camxes_postproc.js"></script>
 
-
-
-
-
-
 	<div id="accordion">
-		<h3><a href="#">Toaq Parser</a></h3><div style="text-align:left">
+		<h3><a href="#">Toaq Parser</a></h3>
+		<div style="text-align:left">
 			<textarea id="i" rows="4"></textarea>
 			<div id="parse_res" style="display:block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF;"
      height="24em">Text will be converted as you type.</div>
 			<div id="parse_result" style="display:block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF;"
      height="24em">Text will be parsed as you type.</div>
 		</div>
-		
-		
-	
-		
-			
-			
-		
 	</div>
 	<br />
 
@@ -72,7 +30,6 @@
 body { font-size: small !important; font-family: sans-serif; margin: 20px; background-color: #ffffff}
 #accordion { margin: 0px auto; width: 500px; text-align: center; }
 table { margin: 0px auto; }
-/* .ui-widget { font-size:small !important; } */
 td {font-size:small !important;}
 textarea {resize: vertical; width: 100%}
 a.example { text-decoration: none; color: #4183C4!important; }
@@ -117,7 +74,7 @@ function run_camxes() {
 	
 	
 	converted_str = document.getElementById("i").value;
-	converted_str = toaq_tone_marks_to_diacritics(converted_str);
+	converted_str = restore_diacritics(converted_str);
 	
 	pretty_output = result_str;
 	pretty_output = pretty_output.replace(/\[([A-Za-z0-9_\(\)'])+ /g, "[");
@@ -135,11 +92,6 @@ function run_camxes() {
 	handler();
 }
 
-
-function is_string(v) {
-    return typeof v.valueOf() === 'string';
-}
-
 function str_print_uint(val, charset) {
 	// 'charset' must be a character array.
 	var radix = charset.length;
@@ -152,42 +104,6 @@ function str_print_uint(val, charset) {
 	}
 	return str;
 }
-
-function str_replace(str, pos, len, sub) {
-	if (pos <= str.length) {
-		if (pos + len >= str.length) len -= pos + len - str.length;
-		return str.substring(0, pos) + sub + str.substring(pos + len);
-	} else return str;
-}
-
-function chr_check(chr, list) {
-	var i = 0;
-	if (!is_string(list)) return false;
-	do if (chr == list[i]) return true; while (i++ < list.length);
-	return false;
-}
-
-function dbg_bracket_count(str) {
-	var i = 0;
-	var x = 0;
-	var y = 0;
-	while (i < str.length) {
-		if (str[i] == '[') x++;
-		else if (str[i] == ']') y++;
-		i++;
-	}
-	alert("Bracket count: open = " + x + ", close = " + y);
-}
-
-var tone_marks =    "/\\^\-~V?";
-var plain_vowels =  "aeiou";
-var acute_vowels =  "áéíóú";
-var grave_vowels =  "àèìòù";
-var circum_vowels = "âêîôû";
-var macron_vowels = "āēīōū";
-var tilde_vowels =  "ãẽĩõũ";
-var breve_vowels =  "ǎěǐǒǔ";
-var hooked_vowels = "ảẻỉỏủ";
 
 function prettify_brackets(str) {
 	var open_brackets = ["(", "[", "{", "<"];
@@ -216,42 +132,6 @@ function prettify_brackets(str) {
 	}
 	return str;
 }
-
-function toaq_tone_marks_to_diacritics(toaq) {
-	if (!is_string(toaq)) return -1;
-	//text = text.replace(/\\\\/gm, "\\");
-	for (var i = 0; i < toaq.length; i++) {
-		i = toaq.search(/[aeiou]+[q]?[\/\\\^\-~\"°?1-7]/);
-		if (i < 0) break;
-		var j = i;
-		while (!chr_check(toaq[i], tone_marks)) {
-			i++;
-			if (i == toaq.length) break;
-		}
-		for (var k = 0; k < 8; k++) if (toaq[i] == tone_marks[k]) break;
-		if (k == 8) continue;
-		toaq = str_replace(toaq, j, 1, make_diacritic_vowel(toaq[j], tone_marks[k]));
-		toaq = str_replace(toaq, i, 1, "");
-	}
-	return toaq;
-}
-
-function make_diacritic_vowel(vowel, tone) {
-	var n = 0;
-	while (plain_vowels[n] != vowel && n < 5) n++;
-	if (n == 5) return "•";  // Unknown vowel
-	switch (tone) {
-		case "/":   return acute_vowels[n];
-		case "\\":  return grave_vowels[n];
-		case "^":   return circum_vowels[n];
-		case "-":   return macron_vowels[n];
-		case "~":   return tilde_vowels[n];
-		case "°":   return breve_vowels[n];
-		case "?":   return hooked_vowels[n];
-		default:    return vowel;  // Unknown tone
-	}
-}
-
 
 function handler(font_size_update, vert_space_update, hor_space_update) {
 try {
@@ -345,9 +225,7 @@ $(function() {
 	handler();
 	
 	// Events
-	$("#i").keypress(function() {handler(); return true;});
 	$("#i").keyup(function() {handler(); return true;});
-	$("#i").keydown(function() {handler(); return true;});
 	$("#i").change(function() {handler(); return true;});
 	$(".redraw").change(function() {return handler()});
 	$("#make-link").click(function() {
