@@ -594,7 +594,7 @@ forethought_coP_pred_content_predicate = expr:( forethought_connective spaces? f
 forethought_coP_pred_content_predicate_1 = expr:( content_predicate spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LA_content_predicate = expr:( LA_content_tone spaces? predicate ) {return _node("CP", expr);}
+LA_content_predicate = expr:( LA_content_tone spaces? predicate ) {return _node("VP", expr);}
 
 LA_content_tone = expr:( LA content_tone ) {return ["starter", _join(expr)];}
 
@@ -693,7 +693,7 @@ illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a ) &boundary ) {return
 // MATH EXPRESSIONS
 // X = expr:(  ) {return _node("X", expr);}
 
-quantifier = expr:( ( t u / s i a / s a / h i / j a / k e / b a q ) &boundary ) {return ["quantifier", _join(expr)];}
+quantifier = expr:( ( t u / s i a / s a / h o i / h i / j a / k e / b a q ) &boundary ) {return ["quantifier", _join(expr)];}
 
 
 
@@ -752,7 +752,7 @@ GA = expr:( g a &boundary ) {return ["end", _join(expr)];}
 
 syllable = expr:( initial? desinence &boundary ) {return _join(expr);}
 
-initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n h / n / p / r / s h / s / t / apostrophe ) {return _join(expr);}
+initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n h / n / p / r / s h / s / t / z / apostrophe ) {return _join(expr);}
 
 // https://toaqlanguage.wordpress.com/2019/10/10/the-great-root-expansion-phonology-update/
 // minus https://toaqlanguage.wordpress.com/2021/08/08/miscellanea1/ plus yq
@@ -791,6 +791,7 @@ t = [tT] {return "t";}
 u = [uU] {return "u";}
 w = [wW] {return "w";}
 y = [yY] {return "y";}
+z = [zZ] {return "z";}
 apostrophe = [xX'] { return "'";}
 
 // -------------------------------------------------------
