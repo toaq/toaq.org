@@ -663,7 +663,7 @@ null = expr:( o? ) {return (expr == "") ? ["BEhO"] : _node("BEhO", expr);}
 
 illocutionary = expr:( illocutionary_1 ) {return _node("illocution", expr);}
 
-illocutionary_1 = expr:( ( m o q / d a / k a / s o / b a ) &boundary ) {return ["illocution", _join(expr)];}
+illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a ) &boundary ) {return ["illocution", _join(expr)];}
 
 
 
