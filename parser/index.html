@@ -1,18 +1,17 @@
 <html>
 <head>
-	<link rel="canonical" href="http://mshang.ca/syntree" />
+	<!-- <link rel="canonical" href="http://mshang.ca/syntree" /> -->
 	<title>Toaq Parser</title>
 	<meta charset="utf-8" />
 </head>
 <body> 
 
-<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="toaqlanguage.js"></script>
 <script type="text/javascript" src="camxes_preproc.js"></script>
 <script type="text/javascript" src="camxes_postproc.js"></script>
 
 	<div id="main">
-		<h1><a href="#">Toaq Parser</a></h1>
+		<h1>Toaq Parser</h1>
 		<div style="text-align:left">
 			<textarea id="i" rows="4"></textarea>
 			<div id="parse_res" class="text-result">Text will be converted as you type.</div>
@@ -25,36 +24,31 @@
 
 
 <style type="text/css">
-body { font-size: small !important; font-family: sans-serif; margin: 20px; background-color: #ffffff; background: url("bgimg4.jpg"); }
+body { font-size: small !important; font-family: 'Segoe UI', 'Lucida Grande', 'Lucida Sans', sans-serif; margin: 20px; background-color: #ffffff; background: url("bgimg4.jpg"); }
 #main { margin: 0px auto 1em auto; width: 500px; text-align: center; }
 #main .text-result { display: block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF; }
 table { margin: 0px auto; }
 td {font-size:small !important;}
-textarea {resize: vertical; width: 100%}
+textarea { font-family: inherit; resize: vertical; width: 100%}
 a.example { text-decoration: none; color: #4183C4!important; }
 .help {text-align: left;}
 #image-goes-here { text-align: center; }
 .nobr { white-space: nowrap; }
 </style>
 
-<link type="text/css" href="css/cupertino/jquery-ui-1.8.18.custom.css" rel="stylesheet" />	
-<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="js/base64.js"></script>
-<script type="text/javascript" src="js/canvas2image.js"></script>
 <script type="text/javascript" src="js/syntree.js"></script>
 
 <script type="text/javascript">
 
 function run_camxes() {
 	try {
-		var input = $('#i').val();
+		var input = document.getElementById('i').value;
 		input = input.replace(/ı/g, "i");
 		input = camxes_preprocessing(input);
 		var result = camxes.parse(input);
 	} catch (e) {
-		$('#parse_res').text("");
-		$('#parse_result').text( e.toString() );
+		document.getElementById('parse_res').innerText = "";
+		document.getElementById('parse_result').innerText = e.toString();
 		return;
 	}
 
@@ -63,7 +57,7 @@ function run_camxes() {
 	
 	var converted_str = document.getElementById("i").value;
 	converted_str = restore_diacritics(converted_str);
-	$('#parse_res').text( converted_str );
+	document.getElementById('parse_res').innerText = converted_str;
 
 	var pretty_output = syntree_str;
 	pretty_output = pretty_output.replace(/\[([A-Za-z0-9_\(\)'])+ /g, "[");
@@ -73,7 +67,7 @@ function run_camxes() {
 	pretty_output = pretty_output.replace(/([A-Z] )\[/g, "$1[");
 	pretty_output = prettify_brackets(pretty_output);
 	pretty_output = pretty_output.replace(/ +/gm, " ");
-	$('#parse_result').text( pretty_output );
+	document.getElementById('parse_result').innerText = pretty_output;
 
 	draw_syntree(syntree_str);
 }
@@ -89,7 +83,7 @@ function prettify_brackets(str) {
 function draw_syntree(str) {
 	const font_size = 12;
 	const term_font = "12pt 'Georgia', serif";
-	const nonterm_font = "12pt 'Lucida Grande', sans-serif";
+	const nonterm_font = "12pt 'Segoe UI', 'Lucida Grande', 'Lucida Sans', sans-serif";
 	const vert_space = 50;
 	const hor_space = 13;
 	const color = true;
@@ -100,11 +94,10 @@ function draw_syntree(str) {
 	return false;
 } // handler()
 
-$(function() {
+document.addEventListener('DOMContentLoaded', function() {
 	// UI 
-	$("#main").accordion({collapsible: true, icons: false, autoHeight: false});
-	$('#i').bind("keyup", run_camxes);
-	$('#i').bind("change", run_camxes);
+	document.getElementById('i').addEventListener("keyup", run_camxes);
+	document.getElementById('i').addEventListener("change", run_camxes);
 });
 </script>
 
