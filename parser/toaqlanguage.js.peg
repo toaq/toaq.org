@@ -657,7 +657,7 @@ prefix = expr:( prefix_1 freemod? ) {return _node("prefix", expr);}
 prefix_1 = expr:( m u &boundary ) {return ["prefix", _join(expr)];}
 
 
-focus = expr:( ( k u / t o u ) &boundary ) {return ["Focus", _join(expr)];}
+focus = expr:( ( k u / t o u / b e i ) &boundary ) {return ["Focus", _join(expr)];}
 
 
 
@@ -693,7 +693,7 @@ illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a ) &boundary ) {return
 // MATH EXPRESSIONS
 // X = expr:(  ) {return _node("X", expr);}
 
-quantifier = expr:( ( t u / s i a / s a / h o i / h i / j a / k e / b a q ) &boundary ) {return ["quantifier", _join(expr)];}
+quantifier = expr:( ( t u / s i a / s a / h o i / h i / j a / k e / b a q / c o ) &boundary ) {return ["quantifier", _join(expr)];}
 
 
 
@@ -742,7 +742,7 @@ LU = expr:( l u &boundary ) {return _join(expr);}
 
 MI = expr:( ( m i / s h u ) &boundary ) {return _join(expr);}
 
-PO = expr:( ( p o / p e ) &boundary ) {return _join(expr);}
+PO = expr:( ( p o / j e i / m e a ) &boundary ) {return _join(expr);}
 
 MO = expr:( ( m o ) &boundary ) {return _join(expr);}
 

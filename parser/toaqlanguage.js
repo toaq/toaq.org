@@ -11123,6 +11123,28 @@ camxes = (function(){
             result0 = null;
             pos = pos2;
           }
+          if (result0 === null) {
+            pos2 = pos;
+            result0 = parse_b();
+            if (result0 !== null) {
+              result1 = parse_e();
+              if (result1 !== null) {
+                result2 = parse_i();
+                if (result2 !== null) {
+                  result0 = [result0, result1, result2];
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
+              } else {
+                result0 = null;
+                pos = pos2;
+              }
+            } else {
+              result0 = null;
+              pos = pos2;
+            }
+          }
         }
         if (result0 !== null) {
           pos2 = pos;
@@ -11789,6 +11811,22 @@ camxes = (function(){
                       } else {
                         result0 = null;
                         pos = pos2;
+                      }
+                      if (result0 === null) {
+                        pos2 = pos;
+                        result0 = parse_c();
+                        if (result0 !== null) {
+                          result1 = parse_o();
+                          if (result1 !== null) {
+                            result0 = [result0, result1];
+                          } else {
+                            result0 = null;
+                            pos = pos2;
+                          }
+                        } else {
+                          result0 = null;
+                          pos = pos2;
+                        }
                       }
                     }
                   }
@@ -12800,7 +12838,7 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1;
+        var result0, result1, result2;
         var pos0, pos1, pos2;
         
         pos0 = pos;
@@ -12821,11 +12859,17 @@ camxes = (function(){
         }
         if (result0 === null) {
           pos2 = pos;
-          result0 = parse_p();
+          result0 = parse_j();
           if (result0 !== null) {
             result1 = parse_e();
             if (result1 !== null) {
-              result0 = [result0, result1];
+              result2 = parse_i();
+              if (result2 !== null) {
+                result0 = [result0, result1, result2];
+              } else {
+                result0 = null;
+                pos = pos2;
+              }
             } else {
               result0 = null;
               pos = pos2;
@@ -12833,6 +12877,28 @@ camxes = (function(){
           } else {
             result0 = null;
             pos = pos2;
+          }
+          if (result0 === null) {
+            pos2 = pos;
+            result0 = parse_m();
+            if (result0 !== null) {
+              result1 = parse_e();
+              if (result1 !== null) {
+                result2 = parse_a();
+                if (result2 !== null) {
+                  result0 = [result0, result1, result2];
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
+              } else {
+                result0 = null;
+                pos = pos2;
+              }
+            } else {
+              result0 = null;
+              pos = pos2;
+            }
           }
         }
         if (result0 !== null) {
