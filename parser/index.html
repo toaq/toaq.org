@@ -23,7 +23,9 @@
 	</div>
 	<br />
 
-	<div id="image-goes-here"></div>
+	<div id="image-goes-here">
+		<canvas id="tree-canvas"></canvas>
+	</div>
 
 
 <style type="text/css">
@@ -88,25 +90,16 @@ function prettify_brackets(str) {
 }
 
 function draw_syntree(str) {
-	try {
-		const font_size = 13;
-		const term_font = "italic 13pt serif";
-		const nonterm_font = "13pt serif";
-		var vert_space = 60;
-		const hor_space = 14;
-		const color = true;
-		const term_lines = true;
-		var img = go(str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines);
-		$("#image-goes-here").empty();
-		$("#image-goes-here").append(img);
-	} catch (err) {
-		if (debug) {
-			throw(err);
-		} else { 
-			if (err == "canvas")
-				$("#image-goes-here").text("Browser not supported.");
-		}
-	} // try-catch
+	const font_size = 13;
+	const term_font = "italic 13pt serif";
+	const nonterm_font = "13pt serif";
+	var vert_space = 60;
+	const hor_space = 14;
+	const color = true;
+	const term_lines = true;
+	const canvas = document.getElementById("tree-canvas");
+	console.log("CANVAS: ", canvas);
+	var img = go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines);
 	return false;
 } // handler()
 

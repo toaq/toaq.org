@@ -102,8 +102,8 @@ Node.prototype.find_height = function() {
 
 Node.prototype.assign_location = function(x, y, font_size, term_lines, vert_space) {
 	// floor + 0.5 for antialiasing
-	this.x = Math.floor(x) + 0.5;
-	this.y = Math.floor(y) + 0.5;
+	this.x = (Math.floor(x * 2) + 0.5) / 2;
+	this.y = (Math.floor(y * 2) + 0.5) / 2;
 	
 	if (this.has_children) {
 		var left_start = x - (this.step)*((this.children.length-1)/2);
@@ -289,7 +289,7 @@ MovementLine.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-function go(str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines) {	
+function go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines) {	
 	// Clean up the string
 	str = str.replace(/^\s+/, "");
 	var open = 0;
@@ -310,16 +310,7 @@ function go(str, font_size, term_font, nonterm_font, vert_space, hor_space, colo
 	root.set_siblings(null);
 	root.check_triangle();
 	
-	var canvas;
-	var ctx;
-	
-	try {
-		// Make a new canvas. Required for IE compatability.
-		canvas = document.createElement("canvas");
-		ctx = canvas.getContext('2d');
-	} catch (err) {
-		throw "canvas";
-	}
+	var ctx = canvas.getContext('2d');
 
 	// Find out dimensions of the tree.
 	root.set_width(ctx, vert_space, hor_space, term_font, nonterm_font);
@@ -342,9 +333,13 @@ function go(str, font_size, term_font, nonterm_font, vert_space, hor_space, colo
 			height += vert_space; break;
 		}
 	
-	canvas.id = "canvas";
-	canvas.width = width;
-	canvas.height = height;
+	canvas.width = width * 2;
+	canvas.height = height * 2;
+	ctx.scale(2, 2);
+	ctx.lineCap = "round";
+	canvas.style.width = width;
+	canvas.style.height = height;
+	ctx.strokeStyle = "rgb(30, 30, 30)";
 	ctx.fillStyle = "rgb(255, 255, 255)";
 	ctx.fillRect(0, 0, width, height);
 	ctx.fillStyle = "rgb(0, 0, 0)";
@@ -356,9 +351,6 @@ function go(str, font_size, term_font, nonterm_font, vert_space, hor_space, colo
 	root.draw(ctx, font_size, term_font, nonterm_font, color, term_lines);
 	for (var i = 0; i < movement_lines.length; i++)
 		if (movement_lines[i].should_draw) movement_lines[i].draw(ctx);
-	
-	// Swap out the image
-	return Canvas2Image.saveAsPNG(canvas, true);
 }
 
 function subscriptify(in_str) {
