@@ -72,7 +72,7 @@
 body { font-size: small !important; font-family: sans-serif; margin: 20px; background-color: #ffffff}
 #accordion { margin: 0px auto; width: 500px; text-align: center; }
 table { margin: 0px auto; }
-//.ui-widget { font-size:small !important; }
+/* .ui-widget { font-size:small !important; } */
 td {font-size:small !important;}
 textarea {resize: vertical; width: 100%}
 a.example { text-decoration: none; color: #4183C4!important; }
@@ -111,11 +111,9 @@ function run_camxes() {
 	  
       return;
     }
-    var result_str = JSON.stringify(result, undefined, 2);
 	/* We get the output mode selected in the combobox */
 	// var mode = document.getElementById("optlist").selectedIndex;
-	/* Postprocessing — if mode == 0, the below function won't modify camxes' output */
-	result_str = camxes_postprocessing(result_str, 1);  // @camxes_postproc.js
+	var result_str = camxes_postprocessing(result);  // @camxes_postproc.js
 	
 	
 	converted_str = document.getElementById("i").value;
@@ -179,6 +177,44 @@ function dbg_bracket_count(str) {
 		i++;
 	}
 	alert("Bracket count: open = " + x + ", close = " + y);
+}
+
+var tone_marks =    "/\\^\-~V?";
+var plain_vowels =  "aeiou";
+var acute_vowels =  "áéíóú";
+var grave_vowels =  "àèìòù";
+var circum_vowels = "âêîôû";
+var macron_vowels = "āēīōū";
+var tilde_vowels =  "ãẽĩõũ";
+var breve_vowels =  "ǎěǐǒǔ";
+var hooked_vowels = "ảẻỉỏủ";
+
+function prettify_brackets(str) {
+	var open_brackets = ["(", "[", "{", "<"];
+	var close_brackets = [")", "]", "}", ">"];
+	var brackets_number = 4;
+//	var numset = ['0','1','2','3','4','5','6','7','8','9'];
+	var numset = ['\u2070','\u00b9','\u00b2','\u00b3','\u2074',
+	              '\u2075','\u2076','\u2077','\u2078','\u2079'];
+	var i = 0;
+	var floor = 0;
+	while (i < str.length) {
+		if (str[i] == '[') {
+			var n = floor % brackets_number;
+			var num = (floor && !n) ?
+				str_print_uint(floor / brackets_number, numset) : "";
+			str = str_replace(str, i, 1, open_brackets[n] + num);
+			floor++;
+		} else if (str[i] == ']') {
+			floor--;
+			var n = floor % brackets_number;
+			var num = (floor && !n) ?
+				str_print_uint(floor / brackets_number, numset) : "";
+			str = str_replace(str, i, 1, num + close_brackets[n]);
+		}
+		i++;
+	}
+	return str;
 }
 
 function toaq_tone_marks_to_diacritics(toaq) {
