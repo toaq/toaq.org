@@ -623,7 +623,8 @@ parenthetical = expr:( parenthetical_1 spaces? end_parenthetical ) {return _node
 
 parenthetical_1 = expr:( start_parenthetical spaces? discourse ) {return _node("parenthetical", expr);}
 
-incidental = expr:( spaces? start_incidental freemod? statement ) {return _node("incidental", expr);}
+// ju takes a sentence: https://toaqlanguage.wordpress.com/2021/08/13/miscellanea-3/
+incidental = expr:( spaces? start_incidental freemod? sentence ) {return _node("incidental", expr);}
 
 
 
