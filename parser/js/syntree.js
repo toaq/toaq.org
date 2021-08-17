@@ -35,7 +35,7 @@ function get_gloss(toa) {
 }
 
 var show_gloss = true;
-var gloss_font = "9pt 'Georgia', serif";
+var gloss_font = "8pt 'Segoe UI', 'Lucida Grande', 'Lucida Sans', sans-serif";
 
 var debug = true;
 var margin = 15; // Number of pixels from tree to edge on each side.
