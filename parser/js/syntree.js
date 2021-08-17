@@ -1,6 +1,42 @@
 ﻿// By Miles Shang <mail@mshang.ca>
 // MIT license
 
+function normalize(toa) {
+	return toa.normalize('NFD').toLowerCase().trim()
+			  .replace(/i/g, 'ı')
+			  .replace(/[\u0300-\u030f]/g, '')
+			  .replace(/[^0-9A-Za-zı'_\-]+/g, ' ')
+			  .replace(/ +/g, ' ');
+}
+
+var glosses = {};
+var parts = new RegExp();
+fetch("https://raw.githubusercontent.com/toaq/dictionary/master/dictionary.json").then(async (response) => {
+	for (const entry of await response.json()) {
+		glosses[normalize(entry.toaq)] = entry.gloss;
+	}
+	parts = new RegExp(Object.getOwnPropertyNames(glosses).sort((a,b) => b.length-a.length).join("|"), "g");
+});
+
+function get_gloss(toa) {
+	const n = normalize(toa);
+	const g = glosses[n];
+	if (g === "ASS") return ".";
+	if (g) return g;
+	let l = 0, gs = [];
+	for (const p of n.matchAll(parts)) {
+		console.log(p)
+		l += p[0].length;
+		gs.push(glosses[p[0]]);
+	}
+	console.log(l, n.length);
+	if (l === n.length) return gs.join("-");
+	return undefined;
+}
+
+var show_gloss = true;
+var gloss_font = "9pt 'Georgia', serif";
+
 var debug = true;
 var margin = 15; // Number of pixels from tree to edge on each side.
 var padding_above_text = 6; // Lines will end this many pixels above text.
@@ -8,6 +44,7 @@ var padding_below_text = 6;
 
 function Node() {
 	this.value = null;
+	this.gloss = null;
 	this.step = null; // Horizontal distance between children.
 	this.draw_triangle = null;
 	this.label = null; // Head of movement.
@@ -25,6 +62,12 @@ function Node() {
 	this.head_chain = null;
 	this.tail_chain = null;
 	this.starred = null;
+}
+
+Node.prototype.set_gloss = function() {
+	if (this.gloss === null) {
+		this.gloss = get_gloss(this.value) ?? "?";
+	}
 }
 
 Node.prototype.set_siblings = function(parent) {
@@ -61,6 +104,11 @@ Node.prototype.set_width = function(ctx, vert_space, hor_space, term_font, nonte
 		ctx.font = nonterm_font;
 
 	var val_width = ctx.measureText(this.value).width;
+	if (show_gloss && !this.has_children) {
+		this.set_gloss();
+		ctx.font = gloss_font;
+		val_width = Math.max(val_width, ctx.measureText(this.gloss).width);
+	}
 
 	for (var child = this.first; child != null; child = child.next)
 		child.set_width(ctx, vert_space, hor_space, term_font, nonterm_font);
@@ -128,6 +176,12 @@ Node.prototype.draw = function(ctx, font_size, term_font, nonterm_font, color, t
 	}
 	
 	ctx.fillText(this.value, this.x, this.y);
+	if (!this.has_children && show_gloss) {
+		this.set_gloss();
+		ctx.fillStyle = "#666666";
+		ctx.font = gloss_font;
+		ctx.fillText(this.gloss, this.x, this.y + 16);
+	}
 	for (var child = this.first; child != null; child = child.next)
 		child.draw(ctx, font_size, term_font, nonterm_font, color, term_lines);
 	
@@ -326,7 +380,7 @@ function go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_spa
 	
 	// Set up the canvas.
 	var width = root.left_width + root.right_width + 2 * margin;
-	var height = root.max_y + font_size + 2 * margin;
+	var height = root.max_y + 2 * font_size + 2 * margin;
 	// Problem: movement lines may protrude from bottom.
 	for (var i = 0; i < movement_lines.length; i++)
 		if (movement_lines[i].max_y == root.max_y) {
@@ -339,7 +393,7 @@ function go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_spa
 	ctx.lineCap = "round";
 	canvas.style.width = width;
 	canvas.style.height = height;
-	ctx.strokeStyle = "rgb(30, 30, 30)";
+	ctx.strokeStyle = "rgb(32, 32, 32)";
 	ctx.fillStyle = "rgb(255, 255, 255)";
 	ctx.fillRect(0, 0, width, height);
 	ctx.fillStyle = "rgb(0, 0, 0)";
