@@ -26,12 +26,11 @@ function get_gloss(toa) {
 	if (g) return g;
 	let l = 0, gs = [];
 	for (const p of n.matchAll(parts)) {
-		console.log(p)
 		l += p[0].length;
 		gs.push(glosses[p[0]]);
 	}
-	console.log(l, n.length);
-	if (l === n.length) return gs.join("-");
+	// console.log(l, n.length);
+	if (l === n.length) return gs.map(g => g.replace(/^-|-$/, "")).join("-");
 	return undefined;
 }
 
@@ -344,7 +343,8 @@ MovementLine.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-function go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines) {	
+function go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines, gloss) {	
+	show_gloss = gloss;
 	// Clean up the string
 	str = str.replace(/^\s+/, "");
 	var open = 0;

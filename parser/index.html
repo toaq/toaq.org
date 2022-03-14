@@ -18,6 +18,9 @@
 			<div id="parse_result" class="text-result">Text will be parsed as you type.</div>
 		</div>
 	</div>
+	<div id="settings">
+		<input id="show-gloss" type="checkbox"></input><label for="show-gloss">Show word glosses</label>
+	</div>
 	<div id="image-goes-here">
 		<canvas id="tree-canvas"></canvas>
 	</div>
@@ -26,6 +29,7 @@
 <style type="text/css">
 body { font-size: small !important; font-family: 'Segoe UI', 'Lucida Grande', 'Lucida Sans', sans-serif; margin: 20px; background-color: #ffffff; background: url("bgimg4.jpg"); }
 #main { margin: 0px auto 1em auto; width: 500px; text-align: center; }
+#settings { margin: 0px auto 1em auto; width: 500px; text-align: center; }
 #main .text-result { display: block; overflow: scroll; max-height:24em; border: solid 1px; padding: 10px; background-color:#FFDBFF; }
 table { margin: 0px auto; }
 td {font-size:small !important;}
@@ -34,6 +38,7 @@ a.example { text-decoration: none; color: #4183C4!important; }
 .help {text-align: left;}
 #image-goes-here { text-align: center; }
 .nobr { white-space: nowrap; }
+label { user-select: none; }
 </style>
 
 <script type="text/javascript" src="js/syntree.js"></script>
@@ -89,7 +94,8 @@ function draw_syntree(str) {
 	const color = true;
 	const term_lines = true;
 	const canvas = document.getElementById("tree-canvas");
-	var img = go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines);
+	const gloss = document.getElementById("show-gloss").checked;
+	var img = go(canvas, str, font_size, term_font, nonterm_font, vert_space, hor_space, color, term_lines, gloss);
 	canvas.style.border = "1px solid #bbbbbb";
 	return false;
 } // handler()
@@ -98,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// UI 
 	document.getElementById('i').addEventListener("keyup", run_camxes);
 	document.getElementById('i').addEventListener("change", run_camxes);
+	document.getElementById('show-gloss').addEventListener("change", run_camxes);
 });
 </script>
 
