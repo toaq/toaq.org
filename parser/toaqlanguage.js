@@ -274,7 +274,6 @@ camxes = (function(){
         "illocutionary_1": parse_illocutionary_1,
         "quantifier": parse_quantifier,
         "tone": parse_tone,
-        "compound_tone": parse_compound_tone,
         "arg_tone": parse_arg_tone,
         "relative_tone": parse_relative_tone,
         "verb_tone": parse_verb_tone,
@@ -295,7 +294,7 @@ camxes = (function(){
         "MO": parse_MO,
         "TEO": parse_TEO,
         "GA": parse_GA,
-        "syllable": parse_syllable,
+        "syllables": parse_syllables,
         "initial": parse_initial,
         "desinence": parse_desinence,
         "vowel": parse_vowel,
@@ -1844,57 +1843,16 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4;
-        var pos0, pos1, pos2;
+        var result0, result1;
+        var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_syllable();
+        result0 = parse_predicate_word();
         if (result0 !== null) {
           result1 = parse_verb_tone();
           if (result1 !== null) {
-            pos2 = pos;
-            result3 = parse_syllable();
-            if (result3 !== null) {
-              result4 = parse_compound_tone();
-              if (result4 !== null) {
-                result3 = [result3, result4];
-              } else {
-                result3 = null;
-                pos = pos2;
-              }
-            } else {
-              result3 = null;
-              pos = pos2;
-            }
-            if (result3 !== null) {
-              result2 = [];
-              while (result3 !== null) {
-                result2.push(result3);
-                pos2 = pos;
-                result3 = parse_syllable();
-                if (result3 !== null) {
-                  result4 = parse_compound_tone();
-                  if (result4 !== null) {
-                    result3 = [result3, result4];
-                  } else {
-                    result3 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result3 = null;
-                  pos = pos2;
-                }
-              }
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -1902,22 +1860,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_predicate_word();
-          if (result0 !== null) {
-            result1 = parse_verb_tone();
-            if (result1 !== null) {
-              result0 = [result0, result1];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["predicate", _join(expr)];})(pos0, result0);
@@ -3431,57 +3373,16 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4;
-        var pos0, pos1, pos2;
+        var result0, result1;
+        var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_syllable();
+        result0 = parse_predicate_word();
         if (result0 !== null) {
           result1 = parse_arg_tone();
           if (result1 !== null) {
-            pos2 = pos;
-            result3 = parse_syllable();
-            if (result3 !== null) {
-              result4 = parse_compound_tone();
-              if (result4 !== null) {
-                result3 = [result3, result4];
-              } else {
-                result3 = null;
-                pos = pos2;
-              }
-            } else {
-              result3 = null;
-              pos = pos2;
-            }
-            if (result3 !== null) {
-              result2 = [];
-              while (result3 !== null) {
-                result2.push(result3);
-                pos2 = pos;
-                result3 = parse_syllable();
-                if (result3 !== null) {
-                  result4 = parse_compound_tone();
-                  if (result4 !== null) {
-                    result3 = [result3, result4];
-                  } else {
-                    result3 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result3 = null;
-                  pos = pos2;
-                }
-              }
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -3489,22 +3390,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_predicate_word();
-          if (result0 !== null) {
-            result1 = parse_arg_tone();
-            if (result1 !== null) {
-              result0 = [result0, result1];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["NP", _join(expr)];})(pos0, result0);
@@ -5024,57 +4909,16 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4;
-        var pos0, pos1, pos2;
+        var result0, result1;
+        var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_syllable();
+        result0 = parse_predicate_word();
         if (result0 !== null) {
           result1 = parse_relative_tone();
           if (result1 !== null) {
-            pos2 = pos;
-            result3 = parse_syllable();
-            if (result3 !== null) {
-              result4 = parse_compound_tone();
-              if (result4 !== null) {
-                result3 = [result3, result4];
-              } else {
-                result3 = null;
-                pos = pos2;
-              }
-            } else {
-              result3 = null;
-              pos = pos2;
-            }
-            if (result3 !== null) {
-              result2 = [];
-              while (result3 !== null) {
-                result2.push(result3);
-                pos2 = pos;
-                result3 = parse_syllable();
-                if (result3 !== null) {
-                  result4 = parse_compound_tone();
-                  if (result4 !== null) {
-                    result3 = [result3, result4];
-                  } else {
-                    result3 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result3 = null;
-                  pos = pos2;
-                }
-              }
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -5082,22 +4926,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_predicate_word();
-          if (result0 !== null) {
-            result1 = parse_relative_tone();
-            if (result1 !== null) {
-              result0 = [result0, result1];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["predicate_2", _join(expr)];})(pos0, result0);
@@ -6997,57 +6825,16 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4;
-        var pos0, pos1, pos2;
+        var result0, result1;
+        var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_syllable();
+        result0 = parse_predicate_word();
         if (result0 !== null) {
           result1 = parse_adverb_tone();
           if (result1 !== null) {
-            pos2 = pos;
-            result3 = parse_syllable();
-            if (result3 !== null) {
-              result4 = parse_compound_tone();
-              if (result4 !== null) {
-                result3 = [result3, result4];
-              } else {
-                result3 = null;
-                pos = pos2;
-              }
-            } else {
-              result3 = null;
-              pos = pos2;
-            }
-            if (result3 !== null) {
-              result2 = [];
-              while (result3 !== null) {
-                result2.push(result3);
-                pos2 = pos;
-                result3 = parse_syllable();
-                if (result3 !== null) {
-                  result4 = parse_compound_tone();
-                  if (result4 !== null) {
-                    result3 = [result3, result4];
-                  } else {
-                    result3 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result3 = null;
-                  pos = pos2;
-                }
-              }
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -7055,22 +6842,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_predicate_word();
-          if (result0 !== null) {
-            result1 = parse_adverb_tone();
-            if (result1 !== null) {
-              result0 = [result0, result1];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["adverb_4", _join(expr)];})(pos0, result0);
@@ -8494,57 +8265,16 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4;
-        var pos0, pos1, pos2;
+        var result0, result1;
+        var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_syllable();
+        result0 = parse_predicate_word();
         if (result0 !== null) {
           result1 = parse_preposition_tone();
           if (result1 !== null) {
-            pos2 = pos;
-            result3 = parse_syllable();
-            if (result3 !== null) {
-              result4 = parse_compound_tone();
-              if (result4 !== null) {
-                result3 = [result3, result4];
-              } else {
-                result3 = null;
-                pos = pos2;
-              }
-            } else {
-              result3 = null;
-              pos = pos2;
-            }
-            if (result3 !== null) {
-              result2 = [];
-              while (result3 !== null) {
-                result2.push(result3);
-                pos2 = pos;
-                result3 = parse_syllable();
-                if (result3 !== null) {
-                  result4 = parse_compound_tone();
-                  if (result4 !== null) {
-                    result3 = [result3, result4];
-                  } else {
-                    result3 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result3 = null;
-                  pos = pos2;
-                }
-              }
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -8552,22 +8282,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_predicate_word();
-          if (result0 !== null) {
-            result1 = parse_preposition_tone();
-            if (result1 !== null) {
-              result0 = [result0, result1];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["P", _join(expr)];})(pos0, result0);
@@ -9792,57 +9506,16 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4;
-        var pos0, pos1, pos2;
+        var result0, result1;
+        var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_syllable();
+        result0 = parse_predicate_word();
         if (result0 !== null) {
           result1 = parse_content_tone();
           if (result1 !== null) {
-            pos2 = pos;
-            result3 = parse_syllable();
-            if (result3 !== null) {
-              result4 = parse_compound_tone();
-              if (result4 !== null) {
-                result3 = [result3, result4];
-              } else {
-                result3 = null;
-                pos = pos2;
-              }
-            } else {
-              result3 = null;
-              pos = pos2;
-            }
-            if (result3 !== null) {
-              result2 = [];
-              while (result3 !== null) {
-                result2.push(result3);
-                pos2 = pos;
-                result3 = parse_syllable();
-                if (result3 !== null) {
-                  result4 = parse_compound_tone();
-                  if (result4 !== null) {
-                    result3 = [result3, result4];
-                  } else {
-                    result3 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result3 = null;
-                  pos = pos2;
-                }
-              }
-            } else {
-              result2 = null;
-            }
-            if (result2 !== null) {
-              result0 = [result0, result1, result2];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
+            result0 = [result0, result1];
           } else {
             result0 = null;
             pos = pos1;
@@ -9850,22 +9523,6 @@ camxes = (function(){
         } else {
           result0 = null;
           pos = pos1;
-        }
-        if (result0 === null) {
-          pos1 = pos;
-          result0 = parse_predicate_word();
-          if (result0 !== null) {
-            result1 = parse_content_tone();
-            if (result1 !== null) {
-              result0 = [result0, result1];
-            } else {
-              result0 = null;
-              pos = pos1;
-            }
-          } else {
-            result0 = null;
-            pos = pos1;
-          }
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return ["predicate_3", _join(expr)];})(pos0, result0);
@@ -11882,20 +11539,17 @@ camxes = (function(){
         var pos0;
         
         pos0 = pos;
-        result0 = parse_compound_tone();
+        result0 = parse_arg_tone();
         if (result0 === null) {
-          result0 = parse_arg_tone();
+          result0 = parse_verb_tone();
           if (result0 === null) {
-            result0 = parse_verb_tone();
+            result0 = parse_relative_tone();
             if (result0 === null) {
-              result0 = parse_relative_tone();
+              result0 = parse_adverb_tone();
               if (result0 === null) {
-                result0 = parse_adverb_tone();
+                result0 = parse_preposition_tone();
                 if (result0 === null) {
-                  result0 = parse_preposition_tone();
-                  if (result0 === null) {
-                    result0 = parse_content_tone();
-                  }
+                  result0 = parse_content_tone();
                 }
               }
             }
@@ -11903,41 +11557,6 @@ camxes = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return _join(expr);})(pos0, result0);
-        }
-        if (result0 === null) {
-          pos = pos0;
-        }
-        
-        cache[cacheKey] = {
-          nextPos: pos,
-          result:  result0
-        };
-        return result0;
-      }
-      
-      function parse_compound_tone() {
-        var cacheKey = "compound_tone@" + pos;
-        var cachedResult = cache[cacheKey];
-        if (cachedResult) {
-          pos = cachedResult.nextPos;
-          return cachedResult.result;
-        }
-        
-        var result0;
-        var pos0;
-        
-        pos0 = pos;
-        if (/^[\-1]/.test(input.charAt(pos))) {
-          result0 = input.charAt(pos);
-          pos++;
-        } else {
-          result0 = null;
-          if (reportFailures === 0) {
-            matchFailed("[\\-1]");
-          }
-        }
-        if (result0 !== null) {
-          result0 = (function(offset) {return "-";})(pos0);
         }
         if (result0 === null) {
           pos = pos0;
@@ -12184,7 +11803,7 @@ camxes = (function(){
           pos = pos2;
         }
         if (result0 !== null) {
-          result1 = parse_syllable();
+          result1 = parse_syllables();
           if (result1 !== null) {
             result0 = [result0, result1];
           } else {
@@ -13121,15 +12740,15 @@ camxes = (function(){
         return result0;
       }
       
-      function parse_syllable() {
-        var cacheKey = "syllable@" + pos;
+      function parse_syllables() {
+        var cacheKey = "syllables@" + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
           return cachedResult.result;
         }
         
-        var result0, result1, result2;
+        var result0, result1, result2, result3, result4;
         var pos0, pos1, pos2;
         
         pos0 = pos;
@@ -13139,18 +12758,55 @@ camxes = (function(){
         if (result0 !== null) {
           result1 = parse_desinence();
           if (result1 !== null) {
+            result2 = [];
             pos2 = pos;
-            reportFailures++;
-            result2 = parse_boundary();
-            reportFailures--;
-            if (result2 !== null) {
-              result2 = "";
-              pos = pos2;
+            result3 = parse_initial();
+            if (result3 !== null) {
+              result4 = parse_desinence();
+              if (result4 !== null) {
+                result3 = [result3, result4];
+              } else {
+                result3 = null;
+                pos = pos2;
+              }
             } else {
-              result2 = null;
+              result3 = null;
+              pos = pos2;
+            }
+            while (result3 !== null) {
+              result2.push(result3);
+              pos2 = pos;
+              result3 = parse_initial();
+              if (result3 !== null) {
+                result4 = parse_desinence();
+                if (result4 !== null) {
+                  result3 = [result3, result4];
+                } else {
+                  result3 = null;
+                  pos = pos2;
+                }
+              } else {
+                result3 = null;
+                pos = pos2;
+              }
             }
             if (result2 !== null) {
-              result0 = [result0, result1, result2];
+              pos2 = pos;
+              reportFailures++;
+              result3 = parse_boundary();
+              reportFailures--;
+              if (result3 !== null) {
+                result3 = "";
+                pos = pos2;
+              } else {
+                result3 = null;
+              }
+              if (result3 !== null) {
+                result0 = [result0, result1, result2, result3];
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
             } else {
               result0 = null;
               pos = pos1;
@@ -14106,22 +13762,6 @@ camxes = (function(){
                                                                                                           result0 = parse_e();
                                                                                                           if (result0 === null) {
                                                                                                             result0 = parse_y();
-                                                                                                            if (result0 === null) {
-                                                                                                              pos1 = pos;
-                                                                                                              result0 = parse_y();
-                                                                                                              if (result0 !== null) {
-                                                                                                                result1 = parse_q();
-                                                                                                                if (result1 !== null) {
-                                                                                                                  result0 = [result0, result1];
-                                                                                                                } else {
-                                                                                                                  result0 = null;
-                                                                                                                  pos = pos1;
-                                                                                                                }
-                                                                                                              } else {
-                                                                                                                result0 = null;
-                                                                                                                pos = pos1;
-                                                                                                              }
-                                                                                                            }
                                                                                                           }
                                                                                                         }
                                                                                                       }

@@ -140,7 +140,7 @@ predicate_2 = expr:( forethought_coP_pred / LU_predicate / MI_predicate / PO_pre
 
 predicate_3 = expr:( predicate_4 spaces? freemod? ) {return _node("predicate", expr);}
 
-predicate_4 = expr:( syllable verb_tone ( syllable compound_tone )+ / predicate_word verb_tone ) {return ["predicate", _join(expr)];}
+predicate_4 = expr:( predicate_word verb_tone ) {return ["predicate", _join(expr)];}
 
 
 serial_predicate = expr:( serial_predicate_2 / predicate_1 ) {return _node("serialpredicate", expr);}
@@ -229,7 +229,7 @@ arg_5 = expr:( serial_argument / arg_6 ) {return _node("NP", expr);}
 
 arg_6 = expr:( content_clause / coP_pred_arg / forethought_coP_pred_arg / LU_arg / MI_arg / PO_arg / quotation_argument / arg_7 ) {return _node("NP", expr);}
 
-arg_7 = expr:( syllable arg_tone ( syllable compound_tone )+ / predicate_word arg_tone ) {return ["NP", _join(expr)];}
+arg_7 = expr:( predicate_word arg_tone ) {return ["NP", _join(expr)];}
 
 
 serial_argument = expr:( arg_6 spaces? serial_predicate ) {return _node("serialargument", expr);}
@@ -317,7 +317,7 @@ relative_predicate_1 = expr:( coP_pred_relative_predicate / forethought_coP_pred
 
 relative_predicate_2 = expr:( LA_relative_predicate / MI_relative_predicate / PO_relative_predicate / quotation_relative_predicate / relative_predicate_3 ) {return _node("predicate_1", expr);}
 
-relative_predicate_3 = expr:( syllable relative_tone ( syllable compound_tone )+ / predicate_word relative_tone ) {return ["predicate_2", _join(expr)];}
+relative_predicate_3 = expr:( predicate_word relative_tone ) {return ["predicate_2", _join(expr)];}
 
 
 serial_relative_predicate = expr:( relative_predicate_1 spaces? serial_predicate ) {return _node("serialrelative", expr);}
@@ -425,7 +425,7 @@ adverb_2 = expr:( serial_adverb / adverb_3 ) {return _node("adverb_2", expr);}
 
 adverb_3 = expr:( coP_pred_adverb / forethought_coP_pred_adverb / LU_adverb / MI_adverb / PO_adverb / quotation_adverb / adverb_4 ) {return _node("adverb_3", expr);}
 
-adverb_4 = expr:( syllable adverb_tone ( syllable compound_tone )+ / predicate_word adverb_tone ) {return ["adverb_4", _join(expr)];}
+adverb_4 = expr:( predicate_word adverb_tone ) {return ["adverb_4", _join(expr)];}
 
 
 coP_adverb = expr:( adverb_1 spaces? co_bar_adverb ) {return _node("CoP(Adv)", expr);}
@@ -508,7 +508,7 @@ preposition_2 = expr:( serial_preposition / preposition_3 ) {return _node("prep"
 
 preposition_3 = expr:( coP_pred_preposition / forethought_coP_pred_preposition / LU_preposition / MI_preposition / PO_preposition / quotation_preposition / preposition_4 ) {return _node("prep", expr);}
 
-preposition_4 = expr:( syllable preposition_tone ( syllable compound_tone )+ / predicate_word preposition_tone ) {return ["P", _join(expr)];}
+preposition_4 = expr:( predicate_word preposition_tone ) {return ["P", _join(expr)];}
 
 
 coP_preposition = expr:( preposition_1 spaces? co_bar_preposition ) {return _node("CoP(P)", expr);}
@@ -580,7 +580,7 @@ content_predicate_1 = expr:( coP_pred_content_predicate / forethought_coP_pred_c
 
 content_predicate_2 = expr:( LA_content_predicate / MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
 
-content_predicate_3 = expr:( syllable content_tone ( syllable compound_tone )+ / predicate_word content_tone ) {return ["predicate_3", _join(expr)];}
+content_predicate_3 = expr:( predicate_word content_tone ) {return ["predicate_3", _join(expr)];}
 
 
 serial_content_predicate = expr:( content_predicate_1 spaces? serial_predicate ) {return _node("serialP", expr);}
@@ -702,9 +702,7 @@ quantifier = expr:( ( t u / s i a / s a / h o i / h i / j a / k e / b a q / c o 
 
 // -------------TONES----------------
 
-tone = expr:( compound_tone / arg_tone / verb_tone / relative_tone / adverb_tone / preposition_tone / content_tone ) {return _join(expr);}
-
-compound_tone = [\-1] {return "-";}
+tone = expr:( arg_tone / verb_tone / relative_tone / adverb_tone / preposition_tone / content_tone ) {return _join(expr);}
 
 arg_tone = [\/2] {return "\/";}
 
@@ -721,7 +719,7 @@ adverb_tone = [~7] {return "~";}
 
 // ----------------------------------
 
-predicate_word = expr:( !function_word syllable ) {return _join(expr);}
+predicate_word = expr:( !function_word word ) {return _join(expr);}
 
 function_word = expr:( sentence_prefix / connective / start_incidental / start_parenthetical / end_parenthetical / quantifier / illocutionary / end_statement / end_prenex / LA / LU / MI / PO / MO / TEO / GA / linking_word / vocative ) {return _join(expr);}
 
@@ -750,18 +748,18 @@ TEO = expr:( ( t e o ) &boundary ) {return ["unquote", _join(expr)];}
 
 GA = expr:( g a &boundary ) {return ["end", _join(expr)];}
 
-syllable = expr:( initial? desinence &boundary ) {return _join(expr);}
+word = expr:( initial? desinence (initial desinence)* &boundary ) {return _join(expr);}
 
 initial = expr:( b / c h / c / d / f / g / h / j / k / l / m / n h / n / p / r / s h / s / t / z / apostrophe ) {return _join(expr);}
 
 // https://toaqlanguage.wordpress.com/2019/10/10/the-great-root-expansion-phonology-update/
-// minus https://toaqlanguage.wordpress.com/2021/08/08/miscellanea1/ plus yq
+// minus https://toaqlanguage.wordpress.com/2021/08/08/miscellanea1/
 desinence = expr:( 
 	a y / a o   / a i   / a q   / a     /
 	u y / u a o / u a i / u e q / u e   / u o i / u o q / u o / u i   / u a q / u a  / u q / u  /
 	i y / i a o / i a i / i e q / i e   / i o i / i o q / i o / i u   / i a q / i a  / i q / i  /
 	o y / o e q / o e   / o i   / o a i / o a q / o a   / o q / o u   / o     /
-	e y / e o q / e o   / e i   / e a i / e a q / e a   / e q / e     / y / y q
+	e y / e o q / e o   / e i   / e a i / e a q / e a   / e q / e     / y
 ) {return _join(expr);}
 
 vowel = expr:( a / e / i / o / u / y ) {return _join(expr);}

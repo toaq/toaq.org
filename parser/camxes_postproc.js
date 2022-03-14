@@ -1,5 +1,5 @@
 const tone_mark_to_diacritic = {
-  "1": "\u0304", "-": "\u0304",
+  "1": "", "-": "", "": "", // old t1
   "2": "\u0301", "/": "\u0301",
   "3": "\u0308", "\"": "\u0308", "V": "\u0308",
   "4": "\u0309", "?": "\u0309",
@@ -9,7 +9,11 @@ const tone_mark_to_diacritic = {
 };
 
 function restore_diacritics(text) {
-  return text.replace(/([aeiouy])([aeiouy]*q?)([/\\^\-~V?1-7])/g, (m, v, vq, tm) => (v + tone_mark_to_diacritic[tm] + vq).normalize("NFC")).replace(/i/gm, "ı");
+  return text
+    .replace(/([aeiouy])(['a-z]*)([/\\^\-~V?1-7]?)/g, (m, v, vq, tm) =>
+      (v + tone_mark_to_diacritic[tm] + vq).normalize("NFC")
+    )
+    .replace(/i/gm, "ı");
 }
 
 function to_syntree(node) {

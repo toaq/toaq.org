@@ -12,8 +12,9 @@ function normalize(toa) {
 var glosses = {};
 var parts = new RegExp();
 fetch("https://raw.githubusercontent.com/toaq/dictionary/master/dictionary.json").then(async (response) => {
-	for (const entry of await response.json()) {
-		glosses[normalize(entry.toaq)] = entry.gloss;
+	for (const { toaq, gloss } of await response.json()) {
+		const has_t5 = toaq.normalize('NFD').includes("\u0302");
+		glosses[has_t5 ? toaq : normalize(toaq)] = gloss;
 	}
 	parts = new RegExp(Object.getOwnPropertyNames(glosses).sort((a,b) => b.length-a.length).join("|"), "g");
 });
@@ -21,7 +22,7 @@ fetch("https://raw.githubusercontent.com/toaq/dictionary/master/dictionary.json"
 function get_gloss(toa) {
 	const n = normalize(toa);
 	const g = glosses[n];
-	if (g === "ASS") return ".";
+	if (g === "ASS") return "[assertion]";
 	if (g) return g;
 	let l = 0, gs = [];
 	for (const p of n.matchAll(parts)) {
