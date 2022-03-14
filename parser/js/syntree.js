@@ -2,9 +2,9 @@
 // MIT license
 
 function normalize(toa) {
-	return toa.normalize('NFD').toLowerCase().trim()
-			  .replace(/i/g, 'ı')
-			  .replace(/[\u0300-\u030f]/g, '')
+	const bare = toa.normalize('NFD').toLowerCase().trim().replace(/i/g, 'ı');
+	if (/^(da|moq|nha|shou|a)\u0302$/.test(bare)) return bare;
+	return bare.replace(/[\u0300-\u030f]/g, '')
 			  .replace(/[^0-9A-Za-zı'_\-]+/g, ' ')
 			  .replace(/ +/g, ' ');
 }
@@ -13,8 +13,7 @@ var glosses = {};
 var parts = new RegExp();
 fetch("https://raw.githubusercontent.com/toaq/dictionary/master/dictionary.json").then(async (response) => {
 	for (const { toaq, gloss } of await response.json()) {
-		const has_t5 = toaq.normalize('NFD').includes("\u0302");
-		glosses[has_t5 ? toaq : normalize(toaq)] = gloss;
+		glosses[normalize(toaq)] = gloss;
 	}
 	parts = new RegExp(Object.getOwnPropertyNames(glosses).sort((a,b) => b.length-a.length).join("|"), "g");
 });
