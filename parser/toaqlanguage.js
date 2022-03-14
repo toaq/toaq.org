@@ -14512,26 +14512,14 @@ camxes = (function(){
         }
         
         var result0;
-        var pos0, pos1;
+        var pos0;
         
         pos0 = pos;
         result0 = parse_tone();
         if (result0 === null) {
-          pos1 = pos;
-          reportFailures++;
-          result0 = parse_initial();
-          reportFailures--;
-          if (result0 !== null) {
-            result0 = "";
-            pos = pos1;
-          } else {
-            result0 = null;
-          }
+          result0 = parse_spaces();
           if (result0 === null) {
-            result0 = parse_spaces();
-            if (result0 === null) {
-              result0 = parse_EOF();
-            }
+            result0 = parse_EOF();
           }
         }
         if (result0 !== null) {

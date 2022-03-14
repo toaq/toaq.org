@@ -769,7 +769,7 @@ desinence = expr:(
 
 vowel = expr:( a / e / i / o / u / y ) {return _join(expr);}
 
-boundary = expr:( tone / &initial / spaces / EOF ) {return _join(expr);}
+boundary = expr:( tone / spaces / EOF ) {return _join(expr);}
 
 a = [aA] {return "a";}
 b = [bB] {return "b";}
