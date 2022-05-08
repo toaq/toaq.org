@@ -59,7 +59,7 @@
 // X = expr:(  ) {return _node("X", expr);}
 
 
-text "text" = expr:(spaces? freemod? spaces? discourse? spaces? EOF?) {return _node("text", expr);}
+text "text" = expr:(spaces? discourse? spaces? EOF?) {return _node("text", expr);}
 
 // -----------SYNTAX------------
 
@@ -67,7 +67,7 @@ text "text" = expr:(spaces? freemod? spaces? discourse? spaces? EOF?) {return _n
 // X = expr:(  ) {return _node("X", expr);}
 
 
-discourse = expr:( ( sentence / fragment )+ ) {return _node("discourse", expr);}
+discourse = expr:( ( sentence / fragment / freemod )+ ) {return _node("discourse", expr);}
 
 sentence = expr:( coP_sentence / sentence_1 ) {return _node("sentence", expr);}
 

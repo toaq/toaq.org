@@ -391,7 +391,7 @@ camxes = (function(){
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3, result4, result5;
+        var result0, result1, result2, result3;
         var pos0, pos1;
         
         reportFailures++;
@@ -400,30 +400,16 @@ camxes = (function(){
         result0 = parse_spaces();
         result0 = result0 !== null ? result0 : "";
         if (result0 !== null) {
-          result1 = parse_freemod();
+          result1 = parse_discourse();
           result1 = result1 !== null ? result1 : "";
           if (result1 !== null) {
             result2 = parse_spaces();
             result2 = result2 !== null ? result2 : "";
             if (result2 !== null) {
-              result3 = parse_discourse();
+              result3 = parse_EOF();
               result3 = result3 !== null ? result3 : "";
               if (result3 !== null) {
-                result4 = parse_spaces();
-                result4 = result4 !== null ? result4 : "";
-                if (result4 !== null) {
-                  result5 = parse_EOF();
-                  result5 = result5 !== null ? result5 : "";
-                  if (result5 !== null) {
-                    result0 = [result0, result1, result2, result3, result4, result5];
-                  } else {
-                    result0 = null;
-                    pos = pos1;
-                  }
-                } else {
-                  result0 = null;
-                  pos = pos1;
-                }
+                result0 = [result0, result1, result2, result3];
               } else {
                 result0 = null;
                 pos = pos1;
@@ -473,6 +459,9 @@ camxes = (function(){
         result1 = parse_sentence();
         if (result1 === null) {
           result1 = parse_fragment();
+          if (result1 === null) {
+            result1 = parse_freemod();
+          }
         }
         if (result1 !== null) {
           result0 = [];
@@ -481,6 +470,9 @@ camxes = (function(){
             result1 = parse_sentence();
             if (result1 === null) {
               result1 = parse_fragment();
+              if (result1 === null) {
+                result1 = parse_freemod();
+              }
             }
           }
         } else {
