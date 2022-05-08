@@ -255,7 +255,7 @@ forethought_coP_pred_arg = expr:( forethought_connective spaces? forethought_coP
 forethought_coP_pred_arg_1 = expr:( argument spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LU_arg = expr:( LU_arg_tone spaces? statement ) {return _node("NP", expr);}
+LU_arg = expr:( LU_arg_tone spaces? statement spaces? end_LU? ) {return _node("NP", expr);}
 
 LU_arg_tone = expr:( LU arg_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -451,7 +451,7 @@ forethought_coP_pred_adverb = expr:( forethought_connective spaces? forethought_
 forethought_coP_pred_adverb_1 = expr:( adverb spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LU_adverb = expr:( LU_adverb_tone spaces? statement ) {return _node("AdvP", expr);}
+LU_adverb = expr:( LU_adverb_tone spaces? statement spaces? end_LU? ) {return _node("AdvP", expr);}
 
 LU_adverb_tone = expr:( LU adverb_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -534,7 +534,7 @@ forethought_coP_pred_preposition = expr:( forethought_connective spaces? foretho
 forethought_coP_pred_preposition_1 = expr:( preposition spaces? forethought_co_bar_pred ) {return _node("CoP(P)", expr);}
 
 
-LU_preposition = expr:( LU_preposition_tone spaces? statement ) {return _node("P", expr);}
+LU_preposition = expr:( LU_preposition_tone spaces? statement spaces? end_LU? ) {return _node("P", expr);}
 
 LU_preposition_tone = expr:( LU preposition_tone ) {return ["predicatizer", _join(expr)];}
 
