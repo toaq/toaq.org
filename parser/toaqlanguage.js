@@ -15586,13 +15586,13 @@ camxes = (function(){
         var pos0;
         
         pos0 = pos;
-        if (/^[.\xAB\xBB\u2039\u203A\t\n\r!, ]/.test(input.charAt(pos))) {
+        if (/^[.\u2026"\xAB\xBB\u2039\u203A\t\n\r!, ]/.test(input.charAt(pos))) {
           result0 = input.charAt(pos);
           pos++;
         } else {
           result0 = null;
           if (reportFailures === 0) {
-            matchFailed("[.\\xAB\\xBB\\u2039\\u203A\\t\\n\\r!, ]");
+            matchFailed("[.\\u2026\"\\xAB\\xBB\\u2039\\u203A\\t\\n\\r!, ]");
           }
         }
         if (result0 !== null) {

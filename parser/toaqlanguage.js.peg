@@ -802,4 +802,4 @@ EOF = expr:(!.)  {return _join(expr);}
 
 spaces = expr:(space_char+ )  {return _join(expr);}
 
-space_char = [.«»‹›\t\n\r!,\u0020] {return "";}
+space_char = [.…«»‹›\t\n\r!,\u0020] {return "";}
