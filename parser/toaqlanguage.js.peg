@@ -566,7 +566,7 @@ MO_preposition_tone = expr:( MO preposition_tone ) {return ["quote", _join(expr)
 
 content_clause = expr:( coP_content_statement / content_clause_1 ) {return _node("content", expr);}
 
-content_clause_1 = expr:( content_predication spaces? end_CP? / LU_content ) {return _node("content", expr);}
+content_clause_1 = expr:( content_predication spaces? end_CP? ) {return _node("content", expr);}
 
 content_predication = expr:( content_predicate spaces? terms? ) {return _node("content_2", expr);}
 
@@ -578,7 +578,7 @@ content_predicate = expr:( serial_content_predicate / content_predicate_1 ) {ret
 
 content_predicate_1 = expr:( coP_pred_content_predicate / forethought_coP_pred_content_predicate / content_predicate_2 ) {return _node("predicate_1", expr);}
 
-content_predicate_2 = expr:( LA_content_predicate / MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
+content_predicate_2 = expr:( LA_content_predicate / LU_content_predicate / MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
 
 content_predicate_3 = expr:( predicate_word content_tone ) {return ["predicate_3", _join(expr)];}
 
@@ -599,7 +599,7 @@ LA_content_predicate = expr:( LA_content_tone spaces? prenex? spaces? predicate 
 LA_content_tone = expr:( LA content_tone ) {return ["starter", _join(expr)];}
 
 
-LU_content = expr:( LU_content_tone statement spaces? end_LU? ) {return _node("CP", expr);}
+LU_content_predicate = expr:( LU_content_tone spaces? statement spaces? end_LU? ) {return _node("CP", expr);}
 
 LU_content_tone = expr:( LU content_tone ) {return ["predicatizer", _join(expr)];}
 

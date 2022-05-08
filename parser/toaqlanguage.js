@@ -243,7 +243,7 @@ camxes = (function(){
         "forethought_coP_pred_content_predicate_1": parse_forethought_coP_pred_content_predicate_1,
         "LA_content_predicate": parse_LA_content_predicate,
         "LA_content_tone": parse_LA_content_tone,
-        "LU_content": parse_LU_content,
+        "LU_content_predicate": parse_LU_content_predicate,
         "LU_content_tone": parse_LU_content_tone,
         "MI_content_predicate": parse_MI_content_predicate,
         "MI_content_predicate_1": parse_MI_content_predicate_1,
@@ -9368,9 +9368,6 @@ camxes = (function(){
           result0 = null;
           pos = pos1;
         }
-        if (result0 === null) {
-          result0 = parse_LU_content();
-        }
         if (result0 !== null) {
           result0 = (function(offset, expr) {return _node("content", expr);})(pos0, result0);
         }
@@ -9557,13 +9554,16 @@ camxes = (function(){
         pos0 = pos;
         result0 = parse_LA_content_predicate();
         if (result0 === null) {
-          result0 = parse_MI_content_predicate();
+          result0 = parse_LU_content_predicate();
           if (result0 === null) {
-            result0 = parse_PO_content_predicate();
+            result0 = parse_MI_content_predicate();
             if (result0 === null) {
-              result0 = parse_quotation_content_predicate();
+              result0 = parse_PO_content_predicate();
               if (result0 === null) {
-                result0 = parse_content_predicate_3();
+                result0 = parse_quotation_content_predicate();
+                if (result0 === null) {
+                  result0 = parse_content_predicate_3();
+                }
               }
             }
           }
@@ -9911,30 +9911,37 @@ camxes = (function(){
         return result0;
       }
       
-      function parse_LU_content() {
-        var cacheKey = "LU_content@" + pos;
+      function parse_LU_content_predicate() {
+        var cacheKey = "LU_content_predicate@" + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
           return cachedResult.result;
         }
         
-        var result0, result1, result2, result3;
+        var result0, result1, result2, result3, result4;
         var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
         result0 = parse_LU_content_tone();
         if (result0 !== null) {
-          result1 = parse_statement();
+          result1 = parse_spaces();
+          result1 = result1 !== null ? result1 : "";
           if (result1 !== null) {
-            result2 = parse_spaces();
-            result2 = result2 !== null ? result2 : "";
+            result2 = parse_statement();
             if (result2 !== null) {
-              result3 = parse_end_LU();
+              result3 = parse_spaces();
               result3 = result3 !== null ? result3 : "";
               if (result3 !== null) {
-                result0 = [result0, result1, result2, result3];
+                result4 = parse_end_LU();
+                result4 = result4 !== null ? result4 : "";
+                if (result4 !== null) {
+                  result0 = [result0, result1, result2, result3, result4];
+                } else {
+                  result0 = null;
+                  pos = pos1;
+                }
               } else {
                 result0 = null;
                 pos = pos1;
