@@ -59,7 +59,7 @@
 // X = expr:(  ) {return _node("X", expr);}
 
 
-text "text" = expr:(spaces? freemod? spaces? discourse? spaces? EOF?) {return _node("text", expr);}
+text "text" = expr:(spaces? discourse? spaces? EOF?) {return _node("text", expr);}
 
 // -----------SYNTAX------------
 
@@ -67,7 +67,7 @@ text "text" = expr:(spaces? freemod? spaces? discourse? spaces? EOF?) {return _n
 // X = expr:(  ) {return _node("X", expr);}
 
 
-discourse = expr:( ( sentence / fragment )+ ) {return _node("discourse", expr);}
+discourse = expr:( ( sentence / fragment / freemod )+ ) {return _node("discourse", expr);}
 
 sentence = expr:( coP_sentence / sentence_1 ) {return _node("sentence", expr);}
 
@@ -255,7 +255,7 @@ forethought_coP_pred_arg = expr:( forethought_connective spaces? forethought_coP
 forethought_coP_pred_arg_1 = expr:( argument spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LU_arg = expr:( LU_arg_tone spaces? statement ) {return _node("NP", expr);}
+LU_arg = expr:( LU_arg_tone spaces? statement spaces? end_LU? ) {return _node("NP", expr);}
 
 LU_arg_tone = expr:( LU arg_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -451,7 +451,7 @@ forethought_coP_pred_adverb = expr:( forethought_connective spaces? forethought_
 forethought_coP_pred_adverb_1 = expr:( adverb spaces? forethought_co_bar_pred ) {return _node("CoP(VP)", expr);}
 
 
-LU_adverb = expr:( LU_adverb_tone spaces? statement ) {return _node("AdvP", expr);}
+LU_adverb = expr:( LU_adverb_tone spaces? statement spaces? end_LU? ) {return _node("AdvP", expr);}
 
 LU_adverb_tone = expr:( LU adverb_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -534,7 +534,7 @@ forethought_coP_pred_preposition = expr:( forethought_connective spaces? foretho
 forethought_coP_pred_preposition_1 = expr:( preposition spaces? forethought_co_bar_pred ) {return _node("CoP(P)", expr);}
 
 
-LU_preposition = expr:( LU_preposition_tone spaces? statement ) {return _node("P", expr);}
+LU_preposition = expr:( LU_preposition_tone spaces? statement spaces? end_LU? ) {return _node("P", expr);}
 
 LU_preposition_tone = expr:( LU preposition_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -566,7 +566,7 @@ MO_preposition_tone = expr:( MO preposition_tone ) {return ["quote", _join(expr)
 
 content_clause = expr:( coP_content_statement / content_clause_1 ) {return _node("content", expr);}
 
-content_clause_1 = expr:( content_predication spaces? end_CP? / LU_content ) {return _node("content", expr);}
+content_clause_1 = expr:( content_predication spaces? end_CP? ) {return _node("content", expr);}
 
 content_predication = expr:( content_predicate spaces? terms? ) {return _node("content_2", expr);}
 
@@ -578,7 +578,7 @@ content_predicate = expr:( serial_content_predicate / content_predicate_1 ) {ret
 
 content_predicate_1 = expr:( coP_pred_content_predicate / forethought_coP_pred_content_predicate / content_predicate_2 ) {return _node("predicate_1", expr);}
 
-content_predicate_2 = expr:( LA_content_predicate / MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
+content_predicate_2 = expr:( LA_content_predicate / LU_content_predicate / MI_content_predicate / PO_content_predicate / quotation_content_predicate / content_predicate_3 ) {return _node("predicate_2", expr);}
 
 content_predicate_3 = expr:( predicate_word content_tone ) {return ["predicate_3", _join(expr)];}
 
@@ -599,7 +599,7 @@ LA_content_predicate = expr:( LA_content_tone spaces? prenex? spaces? predicate 
 LA_content_tone = expr:( LA content_tone ) {return ["starter", _join(expr)];}
 
 
-LU_content = expr:( LU_content_tone statement spaces? end_LU? ) {return _node("CP", expr);}
+LU_content_predicate = expr:( LU_content_tone spaces? statement spaces? end_LU? ) {return _node("CP", expr);}
 
 LU_content_tone = expr:( LU content_tone ) {return ["predicatizer", _join(expr)];}
 
@@ -698,7 +698,7 @@ illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a / s h o u ) tone? &bo
 // MATH EXPRESSIONS
 // X = expr:(  ) {return _node("X", expr);}
 
-quantifier = expr:( ( t u / t u q / t u s h i / s i a / s a / h o i / h i / j a / k e / b a q / c o ) &boundary ) {return ["quantifier", _join(expr)];}
+quantifier = expr:( ( t u q / t u s h i / t u / s i a / s a / h o i / h i / j a / k e / b a q / c o ) &boundary ) {return ["quantifier", _join(expr)];}
 
 
 
@@ -802,4 +802,4 @@ EOF = expr:(!.)  {return _join(expr);}
 
 spaces = expr:(space_char+ )  {return _join(expr);}
 
-space_char = [.\t\n\r!,\u0020] {return "";}
+space_char = [.…«»‹›\t\n\r!,\u0020] {return "";}
