@@ -698,7 +698,7 @@ illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a / s h o u ) tone? &bo
 // MATH EXPRESSIONS
 // X = expr:(  ) {return _node("X", expr);}
 
-quantifier = expr:( ( t u / t u q / t u s h i / s i a / s a / h o i / h i / j a / k e / b a q / c o ) &boundary ) {return ["quantifier", _join(expr)];}
+quantifier = expr:( ( t u q / t u s h i / t u / s i a / s a / h o i / h i / j a / k e / b a q / c o ) &boundary ) {return ["quantifier", _join(expr)];}
 
 
 

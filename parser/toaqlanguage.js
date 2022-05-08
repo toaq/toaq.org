@@ -11930,7 +11930,13 @@ camxes = (function(){
         if (result0 !== null) {
           result1 = parse_u();
           if (result1 !== null) {
-            result0 = [result0, result1];
+            result2 = parse_q();
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = pos2;
+            }
           } else {
             result0 = null;
             pos = pos2;
@@ -11945,9 +11951,21 @@ camxes = (function(){
           if (result0 !== null) {
             result1 = parse_u();
             if (result1 !== null) {
-              result2 = parse_q();
+              result2 = parse_s();
               if (result2 !== null) {
-                result0 = [result0, result1, result2];
+                result3 = parse_h();
+                if (result3 !== null) {
+                  result4 = parse_i();
+                  if (result4 !== null) {
+                    result0 = [result0, result1, result2, result3, result4];
+                  } else {
+                    result0 = null;
+                    pos = pos2;
+                  }
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
               } else {
                 result0 = null;
                 pos = pos2;
@@ -11966,25 +11984,7 @@ camxes = (function(){
             if (result0 !== null) {
               result1 = parse_u();
               if (result1 !== null) {
-                result2 = parse_s();
-                if (result2 !== null) {
-                  result3 = parse_h();
-                  if (result3 !== null) {
-                    result4 = parse_i();
-                    if (result4 !== null) {
-                      result0 = [result0, result1, result2, result3, result4];
-                    } else {
-                      result0 = null;
-                      pos = pos2;
-                    }
-                  } else {
-                    result0 = null;
-                    pos = pos2;
-                  }
-                } else {
-                  result0 = null;
-                  pos = pos2;
-                }
+                result0 = [result0, result1];
               } else {
                 result0 = null;
                 pos = pos2;
