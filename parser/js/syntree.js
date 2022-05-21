@@ -15,7 +15,8 @@ fetch("https://raw.githubusercontent.com/toaq/dictionary/master/dictionary.json"
 	for (const { toaq, gloss } of await response.json()) {
 		glosses[normalize(toaq)] = gloss;
 	}
-	parts = new RegExp(Object.getOwnPropertyNames(glosses).sort((a,b) => b.length-a.length).join("|"), "g");
+	const words = Object.getOwnPropertyNames(glosses).sort((a,b) => b.length-a.length);
+	parts = new RegExp(`(${words.join("|")})(?=[bcdfghjklmnprstxz']|$)`, "g");
 });
 
 function get_gloss(toa) {
