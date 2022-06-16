@@ -728,7 +728,7 @@ predicate_word = expr:( !function_word word ) {return _join(expr);}
 
 function_word = expr:( sentence_prefix / connective / start_incidental / start_parenthetical / end_parenthetical / quantifier / illocutionary / end_statement / end_prenex / LA / LU / MI / PO / MO / TEO / GA / linking_word / vocative ) {return _join(expr);}
 
-end_prenex = expr:( ( b i / p a ) &boundary ) {return ["end", _join(expr)];}
+end_prenex = expr:( b i &boundary ) {return ["end", _join(expr)];}
 
 start_incidental = expr:( j u &boundary ) {return ["incidental", _join(expr)];}
 
