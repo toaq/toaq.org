@@ -1176,6 +1176,28 @@ camxes = (function(){
                 result0 = null;
                 pos = pos2;
               }
+              if (result0 === null) {
+                pos2 = pos;
+                result0 = parse_f();
+                if (result0 !== null) {
+                  result1 = parse_o();
+                  if (result1 !== null) {
+                    result2 = parse_u();
+                    if (result2 !== null) {
+                      result0 = [result0, result1, result2];
+                    } else {
+                      result0 = null;
+                      pos = pos2;
+                    }
+                  } else {
+                    result0 = null;
+                    pos = pos2;
+                  }
+                } else {
+                  result0 = null;
+                  pos = pos2;
+                }
+              }
             }
           }
         }
@@ -11905,6 +11927,28 @@ camxes = (function(){
                   } else {
                     result0 = null;
                     pos = pos2;
+                  }
+                  if (result0 === null) {
+                    pos2 = pos;
+                    result0 = parse_z();
+                    if (result0 !== null) {
+                      result1 = parse_a();
+                      if (result1 !== null) {
+                        result2 = parse_y();
+                        if (result2 !== null) {
+                          result0 = [result0, result1, result2];
+                        } else {
+                          result0 = null;
+                          pos = pos2;
+                        }
+                      } else {
+                        result0 = null;
+                        pos = pos2;
+                      }
+                    } else {
+                      result0 = null;
+                      pos = pos2;
+                    }
                   }
                 }
               }

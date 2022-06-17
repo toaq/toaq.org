@@ -101,7 +101,7 @@ forethought_co_bar_sentence = expr:( gik spaces? sentence ) {return _node("Co'",
 // SENTENCE and STATEMENT
 // X = expr:(  ) {return _node("X", expr);}
 
-sentence_prefix = expr:( ( k e o / j e / t i u / n h u ) &boundary ) {return ["prefix", _join(expr)];}
+sentence_prefix = expr:( ( k e o / j e / t i u / n h u / f o u ) &boundary ) {return ["prefix", _join(expr)];}
 
 statement = expr:( coP_statement / statement_1 ) {return _node("statement", expr);}
 
@@ -691,7 +691,7 @@ null = expr:( o? ) {return (expr == "") ? ["BEhO"] : _node("BEhO", expr);}
 
 illocutionary = expr:( illocutionary_1 ) {return _node("illocution", expr);}
 
-illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a / s h o u ) tone? &boundary ) {return ["illocution", _join(expr)];}
+illocutionary_1 = expr:( ( m o q / d a / n h a / k a / b a / s h o u / z a y ) tone? &boundary ) {return ["illocution", _join(expr)];}
 
 
 
